@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HelloWorldLoadBalacer
 {
-    public class Program
+    public class HelloWorldLoadBalacer
     {
         public static void Main(string[] args) {
             CreateHostBuilder(args).Build().Run();

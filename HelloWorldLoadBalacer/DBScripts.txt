@@ -1,0 +1,23 @@
+USE [LoadBalancer]
+GO
+
+/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 10/29/2020 4:22:34 PM ******/
+DROP TABLE [dbo].[LoadBalancer]
+GO
+
+/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 10/29/2020 4:22:34 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[LoadBalancer](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Message] [varchar](50) NOT NULL,
+	[DockerName] [varchar](500) NOT NULL,
+	[CreateTime] [datetime] NOT NULL
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,31 @@
+version: "3"
+  
+services:
+    
+    api-caller:
+        image: orion/apicaller
+        working_dir: /app
+        environment:
+          - NGINX_URL=0.0.0.0:8080
+          - RECORD_COUNT=100
+		  	
+    api1:
+        image: orion/api-hello-world
+        working_dir: /app
+        environment:
+          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
+          - DockerName=api1
+		  
+    api2:
+        image: orion/api-hello-world
+        working_dir: /app
+        environment:
+          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
+          - DockerName=api2
+		  
+    api3:
+        image: orion/api-hello-world
+        working_dir: /app
+        environment:
+          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
+          - DockerName=api3

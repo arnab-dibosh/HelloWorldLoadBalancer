@@ -1,32 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "D:\\OrionInfo\\HelloWorldLoadBalancer\\HelloWorldLoadBalancer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj": {}
+    "C:\\Users\\Nesar\\Desktop\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj": {}
   },
   "projects": {
-    "D:\\OrionInfo\\HelloWorldLoadBalancer\\HelloWorldLoadBalancer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj": {
+    "C:\\Users\\Nesar\\Desktop\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\OrionInfo\\HelloWorldLoadBalancer\\HelloWorldLoadBalancer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj",
+        "projectUniqueName": "C:\\Users\\Nesar\\Desktop\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj",
         "projectName": "HelloWorldLoadBalacer",
-        "projectPath": "D:\\OrionInfo\\HelloWorldLoadBalancer\\HelloWorldLoadBalancer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\OrionInfo\\HelloWorldLoadBalancer\\HelloWorldLoadBalancer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\obj\\",
+        "projectPath": "C:\\Users\\Nesar\\Desktop\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer.csproj",
+        "packagesPath": "C:\\Users\\Nesar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nesar\\Desktop\\HelloWorldLoadBalacer\\HelloWorldLoadBalacer\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\Nesar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\FastReports\\FastReport.Net Trial\\Nugets": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -44,9 +38,25 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[3.1.9, )"
+            },
+            "Microsoft.Extensions.Configuration.FileExtensions": {
+              "target": "Package",
+              "version": "[3.1.9, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[3.1.9, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.2, )"
             }
           },
           "imports": [
@@ -67,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }
