@@ -26,31 +26,33 @@ namespace HelloWorldLoadBalacer.Controllers
         }
 
         [HttpPost("/WriteData", Name = "WriteData")]
-        public string WriteData() {
+        public string WriteData(string transactionId) {
+            string retVal = transactionId;
+            try {
+                
 
-            string retVal = "";
+                string strConnectionString = ReadConfigurationValue("DBConnectionString");
+                string strDockerName = System.Environment.MachineName;
+                //string strDockerName = ReadConfigurationValue("DockerName");
+                string[] ConnectionStringList = strConnectionString.Split('|');
 
-            string strConnectionString = ReadConfigurationValue("DBConnectionString");
-            string strDockerName = System.Environment.MachineName;
-            //string strDockerName = ReadConfigurationValue("DockerName");
-            string[] ConnectionStringList = strConnectionString.Split('|');
+                foreach (string item in ConnectionStringList) {
+                    DBUtility.ConnectionString = item.Trim();
 
-            foreach (string item in ConnectionStringList)
-            {
-                DBUtility.ConnectionString = item.Trim();
-
-                try
-                {
-                    if (DBUtility.InsertTable("Hello-World", strDockerName))
-                    {
-                        retVal = "Write to DB sucessfull";
-                        break;
+                    try {
+                        if (DBUtility.InsertTable("Hello-World", strDockerName)) {
+                            break;
+                        }
                     }
+                    catch { }
                 }
-                catch { }
-            }
 
-            return retVal;
+                return retVal;
+            }
+            catch (Exception ex) {
+
+                return transactionId + "Error " + ex.Message;
+            }            
         }
 
         static IConfigurationRoot config;

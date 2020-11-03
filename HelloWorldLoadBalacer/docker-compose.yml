@@ -2,30 +2,176 @@ version: "3"
   
 services:
     
-    api-caller:
-        image: orion/apicaller
+    pc1:
+        image: orion/api-hello-world        
         working_dir: /app
+        ports:
+            - "5001:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
         environment:
-          - NGINX_URL=0.0.0.0:8080
-          - RECORD_COUNT=100
-		  	
-    api1:
-        image: orion/api-hello-world
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1   
+    pc2:
+        image: orion/api-hello-world        
         working_dir: /app
+        ports:
+            - "5002:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
         environment:
-          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1  
+    pc3:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5003:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1   
+    pc4:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5004:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1    
+    pc5:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5005:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1  
+    pc6:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5006:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1   
+    pc7:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5007:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
           - DockerName=api1
-		  
-    api2:
-        image: orion/api-hello-world
+    
+    pc8:
+        image: orion/api-hello-world        
         working_dir: /app
+        ports:
+            - "5008:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
         environment:
-          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
-          - DockerName=api2
-		  
-    api3:
-        image: orion/api-hello-world
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1  
+    
+    pc9:
+        image: orion/api-hello-world        
         working_dir: /app
+        ports:
+            - "5009:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
         environment:
-          - DBConnectionString=Data Source = .;Initial Catalog=LoadBalancer2;Integrated Security=true;|Data Source = .;Initial Catalog=LoadBalancer;Integrated Security=true;
-          - DockerName=api3
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1   
+    
+    pc10:
+        image: orion/api-hello-world        
+        working_dir: /app
+        ports:
+            - "5010:5000"
+        deploy:
+          resources:
+            limits:
+              cpus: '0.50'
+              memory: 2G
+            reservations:
+              cpus: '0.25'
+              memory: 1G
+        
+        environment:
+          - DBConnectionString=Server=172.16.219.66;Database=LoadBalancer;User ID=sa;password=Techvision123?;|Server=59.152.61.37,6394;Database=LoadBalancer;User ID=sa;password=Techvision123?;
+          - DockerName=api1

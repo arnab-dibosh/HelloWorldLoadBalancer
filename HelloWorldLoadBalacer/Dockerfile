@@ -8,7 +8,7 @@ RUN dotnet restore HelloWorldLoadBalacer.sln
 RUN dotnet publish HelloWorldLoadBalacer.sln -c Release -o out
 
 # Install light weight aspnet inside docker container. 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "HelloWorldLoadBalacer.dll"]
