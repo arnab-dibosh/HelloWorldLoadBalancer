@@ -1,11 +1,60 @@
 USE [LoadBalancer]
 GO
 
-/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 10/29/2020 4:22:34 PM ******/
+/****** Object:  Table [dbo].[ApiResponseTime]    Script Date: 11/12/2020 3:55:51 PM ******/
+DROP TABLE [dbo].[ApiResponseTime]
+GO
+
+/****** Object:  Table [dbo].[ApiResponseTime]    Script Date: 11/12/2020 3:55:51 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ApiResponseTime](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[TransactionId] [varchar](50) NOT NULL,
+	[ApiResponseTime] [datetime2](7) NOT NULL
+) ON [PRIMARY]
+GO
+
+
+USE [LoadBalancer]
+GO
+
+/****** Object:  Table [dbo].[ExceptionLog]    Script Date: 11/12/2020 4:07:15 PM ******/
+DROP TABLE [dbo].[ExceptionLog]
+GO
+
+/****** Object:  Table [dbo].[ExceptionLog]    Script Date: 11/12/2020 4:07:15 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ExceptionLog](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[TransactionId] [varchar](50) NOT NULL,
+	[ExceptionText] [varchar](max) NOT NULL,
+	[DockerName] [varchar](100) NOT NULL,
+	[CreateTime] [datetime2](7) NOT NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [LoadBalancer]
+GO
+
+ALTER TABLE [dbo].[LoadBalancer] DROP CONSTRAINT [DF_LoadBalancer_CreateTime]
+GO
+
+/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 11/12/2020 4:07:50 PM ******/
 DROP TABLE [dbo].[LoadBalancer]
 GO
 
-/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 10/29/2020 4:22:34 PM ******/
+/****** Object:  Table [dbo].[LoadBalancer]    Script Date: 11/12/2020 4:07:50 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -14,10 +63,17 @@ GO
 
 CREATE TABLE [dbo].[LoadBalancer](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[TransactionId] [varchar](50) NOT NULL,
 	[Message] [varchar](50) NOT NULL,
 	[DockerName] [varchar](500) NOT NULL,
-	[CreateTime] [datetime] NOT NULL
+	[ClientRequestTime] [datetime2](7) NULL,
+	[ApiRequestStartTime] [datetime2](7) NULL,
+	[CreateTime] [datetime2](7) NULL,
+	[ApiToServerTime] [int] NULL
 ) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[LoadBalancer] ADD  CONSTRAINT [DF_LoadBalancer_CreateTime]  DEFAULT (getdate()) FOR [CreateTime]
 GO
 
 
