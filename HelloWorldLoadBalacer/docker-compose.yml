@@ -6,15 +6,15 @@ services:
         image: orion/api-hello-world  
         working_dir: /app
         ports:
-            - "5001-5200:5000"
+            - "5001-5120:5000"
         deploy:
           resources:
             limits:
-              cpus: '0.08'
-              memory: 2G
+              cpus: '0.15'
+              memory: 3G
             reservations:
               cpus: '0.02'
-              memory: 512m
+              memory: 1G
         
         environment:
           - TZ=Asia/Dhaka
