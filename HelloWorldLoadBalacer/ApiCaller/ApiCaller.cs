@@ -93,14 +93,7 @@ namespace ApiCaller
         static IConfigurationRoot config;
         static string ReadConfigurationValue(string strKey)
         {
-            if (config == null)
-            {
-                config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", false)
-                .AddEnvironmentVariables()
-                .Build();
-            }
-
+           
             var strVal = Environment.GetEnvironmentVariable(strKey);
             if (string.IsNullOrEmpty(strVal))
             {

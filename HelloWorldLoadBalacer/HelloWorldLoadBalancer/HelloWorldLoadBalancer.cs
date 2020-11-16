@@ -26,10 +26,6 @@ namespace HelloWorldLoadBalacer
           .ConfigureWebHostDefaults(webBuilder => {
               webBuilder.UseStartup<Startup>();
               webBuilder.UseUrls("http://+:5000");
-          })
-           .ConfigureLogging((ctx, logging) =>
-           {
-               logging.AddConfiguration(ctx.Configuration.GetSection("Logging"));
-           });
+          });
     }
 }

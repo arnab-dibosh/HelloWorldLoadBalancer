@@ -48,9 +48,9 @@
               "target": "Package",
               "version": "[3.1.9, )"
             },
-            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+            "Microsoft.Extensions.Logging.Console": {
               "target": "Package",
-              "version": "[3.1.9, )"
+              "version": "[5.0.0, )"
             },
             "Microsoft.OpenApi": {
               "target": "Package",

@@ -175,7 +175,6 @@ D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.EventLog.dll
-D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.csprojAssemblyReference.cache
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.csproj.CoreCompileInputs.cache
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.AssemblyInfoInputs.cache
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.AssemblyInfo.cs
@@ -183,3 +182,4 @@ D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.dll
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.pdb
 D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.genruntimeconfig.cache
+D:\OrionInfo\HelloWorldLoadBalancer\HelloWorldLoadBalancer\HelloWorldLoadBalacer\ApiCaller\obj\Debug\netcoreapp3.1\ApiCaller.csprojAssemblyReference.cache
