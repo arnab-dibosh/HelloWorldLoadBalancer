@@ -1,0 +1,13 @@
+version: "3.2"
+  
+services:
+    
+    api:
+        image: orion/api-hello-world  
+        working_dir: /app
+        ports:
+            - "5001-5020:5000"    
+        environment:
+          - TZ=Asia/Dhaka
+          - DBConnectionString=Server=192.168.1.32;Database=LoadBalancer;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=200;
+          - DockerName=api1          
