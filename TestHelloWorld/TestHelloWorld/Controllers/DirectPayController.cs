@@ -41,25 +41,30 @@ namespace TestHelloWorld.Controllers
                 sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
                 receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
                 idtppin = doc.GetElementsByTagName("IDTP_PIN").Item(0).InnerText;
-                string amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
 
                 if (!idtppin.Equals("123456")) throw new Exception("Invalid Pin");
 
                 decimal amount = 0;
                 decimal.TryParse(amountstr, out amount);
 
-                var sernderInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == sendervid).FirstOrDefault();
-                var receiverInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == receiverVid).FirstOrDefault();
-                decimal availBalance = 0;
-                
+                 decimal availBalance = 0;
+                //DBUtility.ConnectionString = "Server=DESKTOP-QS1VJGL\\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;";
+                DBUtility.ConnectionString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
+                var sernderInfo = DBUtility.GetUser(sendervid);
+                var receiverInfo = DBUtility.GetUser(receiverVid);
 
-                if (sernderInfo.Bank.Name == "SampleBank1") {
-                    availBalance = _context.SampleBank1Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
-                }
-                else if (sernderInfo.Bank.Name == "SampleBank2") {
-                    availBalance = _context.SampleBank2Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
-                }
-                if (amount > availBalance) throw new Exception("Does not have enoungh balance!");
+                //var sernderInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == sendervid).FirstOrDefault();
+                //var receiverInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == receiverVid).FirstOrDefault();
+
+                //if (sernderInfo.Bank.Name == "SampleBank1") {
+                //    availBalance = _context.SampleBank1Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
+                //}
+                //else if (sernderInfo.Bank.Name == "SampleBank2") {
+                //    availBalance = _context.SampleBank2Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
+                //}
+               // if (amount > availBalance) throw new Exception("Does not have enoungh balance!");
 
                 var transaction = new Transaction();
                 transaction.TransactionId = transactionId;//Guid.NewGuid().ToString();
@@ -73,7 +78,9 @@ namespace TestHelloWorld.Controllers
                 transaction.TranDate = DateTime.Now;
                 transaction.ClientRequestTime = clientRequestTime;
 
-                _context.Transactions.Add(transaction);
+                DBUtility.InsertTransaction(transaction);
+
+               // _context.Transactions.Add(transaction);
 
                 //if (sernderInfo.Bank.Name == "SampleBank1") {
                 //    var senderBankInfo = _context.SampleBank1Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault();
@@ -97,7 +104,7 @@ namespace TestHelloWorld.Controllers
                 //    receiverBankInfo.Balance += amount;
                 //    _context.SampleBank2Info.Update(receiverBankInfo);
                 //}
-                _context.SaveChanges();
+               // _context.SaveChanges();
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
