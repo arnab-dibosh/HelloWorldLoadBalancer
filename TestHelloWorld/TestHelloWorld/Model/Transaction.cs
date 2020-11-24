@@ -21,5 +21,6 @@ namespace TestHelloWorld.Model
         public int ReceicerBankId { get; set; }
         public decimal Amount { get; set; }
         public DateTime TranDate { get; set; }
+        public string ClientRequestTime { get; set; }
     }
 }

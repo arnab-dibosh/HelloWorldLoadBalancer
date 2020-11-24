@@ -80,6 +80,9 @@ namespace TestHelloWorld.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ClientRequestTime")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ReceicerBankId")
                         .HasColumnType("int");
 
