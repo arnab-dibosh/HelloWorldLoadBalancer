@@ -55,19 +55,9 @@ namespace TestHelloWorld.Controllers
                 var sernderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
 
-                //var sernderInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == sendervid).FirstOrDefault();
-                //var receiverInfo = _context.Users.Include(s => s.Bank).Where(x => x.VID == receiverVid).FirstOrDefault();
-
-                //if (sernderInfo.Bank.Name == "SampleBank1") {
-                //    availBalance = _context.SampleBank1Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
-                //}
-                //else if (sernderInfo.Bank.Name == "SampleBank2") {
-                //    availBalance = _context.SampleBank2Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault().Balance;
-                //}
-               // if (amount > availBalance) throw new Exception("Does not have enoungh balance!");
-
+               
                 var transaction = new Transaction();
-                transaction.TransactionId = transactionId;//Guid.NewGuid().ToString();
+                transaction.TransactionId = transactionId;
                 transaction.SenderVid = sernderInfo.VID;
                 transaction.SenderAccNo = sernderInfo.AccountNo;
                 transaction.SenderBankId = sernderInfo.BankId;
@@ -80,31 +70,6 @@ namespace TestHelloWorld.Controllers
 
                 DBUtility.InsertTransaction(transaction);
 
-               // _context.Transactions.Add(transaction);
-
-                //if (sernderInfo.Bank.Name == "SampleBank1") {
-                //    var senderBankInfo = _context.SampleBank1Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault();
-                //    senderBankInfo.Balance -= amount;
-                //    _context.SampleBank1Info.Update(senderBankInfo);
-
-                //}
-                //else if (sernderInfo.Bank.Name == "SampleBank2") {
-                //    var senderBankInfo = _context.SampleBank2Info.Where(x => x.AccountNo == sernderInfo.AccountNo).FirstOrDefault();
-                //    senderBankInfo.Balance -= amount;
-                //    _context.SampleBank2Info.Update(senderBankInfo);
-                //}
-
-                //if (receiverInfo.Bank.Name == "SampleBank1") {
-                //    var receiverBankInfo = _context.SampleBank1Info.Where(x => x.AccountNo == receiverInfo.AccountNo).FirstOrDefault();
-                //    receiverBankInfo.Balance += amount;
-                //    _context.SampleBank1Info.Update(receiverBankInfo);
-                //}
-                //else if (receiverInfo.Bank.Name == "SampleBank2") {
-                //    var receiverBankInfo = _context.SampleBank2Info.Where(x => x.AccountNo == receiverInfo.AccountNo).FirstOrDefault();
-                //    receiverBankInfo.Balance += amount;
-                //    _context.SampleBank2Info.Update(receiverBankInfo);
-                //}
-               // _context.SaveChanges();
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
