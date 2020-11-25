@@ -22,10 +22,10 @@ namespace TestHelloWorld.Controllers
     public class DirectPayController : ControllerBase
     {
 
-        private readonly ILogger<BaseController> _logger;
+        private readonly ILogger<DirectPayController> _logger;
         private readonly TestDbContext _context;
 
-        public DirectPayController(ILogger<BaseController> logger, TestDbContext context) {
+        public DirectPayController(ILogger<DirectPayController> logger, TestDbContext context) {
             _context = context;
             _logger = logger;
         }
@@ -52,7 +52,7 @@ namespace TestHelloWorld.Controllers
                  decimal availBalance = 0;
                 DBUtility.ConnectionString = "Server=DESKTOP-QS1VJGL\\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;";
                 //DBUtility.ConnectionString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
-                DBUtility.ProcessDirectPay(sendervid, receiverVid, amount, transactionId, clientRequestTime);
+                DBUtility.ProcessDirectPay(sendervid, receiverVid, amount, transactionId, clientRequestTime, _logger);
 
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });

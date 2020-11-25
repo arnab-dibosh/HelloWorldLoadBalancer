@@ -234,12 +234,14 @@ namespace TestHelloWorld
             }
         }
 
-        public async static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime) {
+        public async static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
             try {
                 
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    _logger.LogDebug(1, transactionId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     connection.Open();
+                    _logger.LogDebug(2, transactionId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     SqlCommand sql_cmnd = new SqlCommand("USP_DIRECT_PAY", connection);
                     sql_cmnd.CommandType = CommandType.StoredProcedure;
                     sql_cmnd.Parameters.AddWithValue("@SENDER_VID", SqlDbType.NVarChar).Value = senderVid;
@@ -248,6 +250,7 @@ namespace TestHelloWorld
                     sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
                     sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
                     sql_cmnd.ExecuteNonQueryAsync();
+                    _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     connection.Close();
                 }
             }
