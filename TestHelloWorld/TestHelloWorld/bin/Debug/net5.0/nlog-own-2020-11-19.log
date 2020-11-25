@@ -1,9 +1,0 @@
-2020-11-19 20:22:02.8696||DEBUG|TestHelloWorld.Program|init main |url: |action: 
-2020-11-19 20:22:26.7064|1|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|Req- 2020-11-19 20:22:26.6919766 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:26.8233|2|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|BC- 2020-11-19 20:22:26.8232839 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:26.8862|3|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|BCOM- 2020-11-19 20:22:26.8862523 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:26.8862|4|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|BOPEN- 2020-11-19 20:22:26.8896651 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:27.2159|5|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|AOPEN- 2020-11-19 20:22:27.2159354 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:27.2440|6|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|AEX- 2020-11-19 20:22:27.2440032 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:27.2440|7|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|ACLOSE- 2020-11-19 20:22:27.2482772 |url: http://localhost/WriteData|action: WriteData
-2020-11-19 20:22:27.2440|8|DEBUG|TestHelloWorld.Controllers.BaseController|2234234|Res- 2020-11-19 20:22:27.2487835 |url: http://localhost/WriteData|action: WriteData

@@ -1,7 +1,0 @@
-2020-11-23 18:31:20.8038||DEBUG|TestHelloWorld.Program|init main |url: |action: 
-2020-11-23 18:37:28.3925||DEBUG|TestHelloWorld.Program|init main |url: |action: 
-2020-11-23 18:49:32.9434||DEBUG|TestHelloWorld.Program|init main |url: |action: 
-2020-11-23 18:51:35.3682|4|DEBUG|TestHelloWorld.Controllers.BaseController|12356849|B4OPEN- 2020-11-23 18:51:35.2534475 |url: http://localhost/DirectPayRequest|action: DirectPayRequest
-2020-11-23 18:51:38.3764|5|DEBUG|TestHelloWorld.Controllers.BaseController|12356849|AOPEN-B4EX- 2020-11-23 18:51:38.3102542 |url: http://localhost/DirectPayRequest|action: DirectPayRequest
-2020-11-23 18:51:40.2679|6|DEBUG|TestHelloWorld.Controllers.BaseController|12356849|AEX- 2020-11-23 18:51:40.2003903 |url: http://localhost/DirectPayRequest|action: DirectPayRequest
-2020-11-23 18:51:42.4462|7|DEBUG|TestHelloWorld.Controllers.BaseController|12356849|ACLOSE- 2020-11-23 18:51:42.4462185 |url: http://localhost/DirectPayRequest|action: DirectPayRequest
