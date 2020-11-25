@@ -233,5 +233,28 @@ namespace TestHelloWorld
                 }
             }
         }
+
+        public async static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime) {
+            try {
+                
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    connection.Open();
+                    SqlCommand sql_cmnd = new SqlCommand("USP_DIRECT_PAY", connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@SENDER_VID", SqlDbType.NVarChar).Value = senderVid;
+                    sql_cmnd.Parameters.AddWithValue("@RECEIVER_VID", SqlDbType.NVarChar).Value = receiverVid;
+                    sql_cmnd.Parameters.AddWithValue("@AMOUNT", SqlDbType.Decimal).Value = amount;
+                    sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
+                    sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
+                    sql_cmnd.ExecuteNonQueryAsync();
+                    connection.Close();
+                }
+            }
+            catch (Exception Ex) {
+                throw;
+            }
+        }
+
     }
 }

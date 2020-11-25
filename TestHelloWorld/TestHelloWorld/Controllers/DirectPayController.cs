@@ -36,7 +36,7 @@ namespace TestHelloWorld.Controllers
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(payload.xmlData);
             try {
-                string sendervid = "", receiverVid = "a", idtppin="";
+                string sendervid = "", receiverVid = "", idtppin="";
 
                 sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
                 receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
@@ -50,25 +50,9 @@ namespace TestHelloWorld.Controllers
                 decimal.TryParse(amountstr, out amount);
 
                  decimal availBalance = 0;
-                //DBUtility.ConnectionString = "Server=DESKTOP-QS1VJGL\\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;";
-                DBUtility.ConnectionString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
-                var sernderInfo = DBUtility.GetUser(sendervid);
-                var receiverInfo = DBUtility.GetUser(receiverVid);
-
-               
-                var transaction = new Transaction();
-                transaction.TransactionId = transactionId;
-                transaction.SenderVid = sernderInfo.VID;
-                transaction.SenderAccNo = sernderInfo.AccountNo;
-                transaction.SenderBankId = sernderInfo.BankId;
-                transaction.ReceicerVid = receiverInfo.VID;
-                transaction.ReceiverAccNo = receiverInfo.AccountNo;
-                transaction.ReceicerBankId = receiverInfo.BankId;
-                transaction.Amount = amount;
-                transaction.TranDate = DateTime.Now;
-                transaction.ClientRequestTime = clientRequestTime;
-
-                DBUtility.InsertTransaction(transaction);
+                DBUtility.ConnectionString = "Server=DESKTOP-QS1VJGL\\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;";
+                //DBUtility.ConnectionString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
+                DBUtility.ProcessDirectPay(sendervid, receiverVid, amount, transactionId, clientRequestTime);
 
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
