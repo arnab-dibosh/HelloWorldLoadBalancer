@@ -12,7 +12,9 @@ namespace TestHelloWorld
 {
     public class DBUtility
     {
-        private static string _mConString;
+
+        //private static string _mConString = "Server=DESKTOP-QS1VJGL\\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;";
+        private static string _mConString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
         public static string ConnectionString
         {
 
@@ -234,7 +236,7 @@ namespace TestHelloWorld
             }
         }
 
-        public async static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
+        public static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
             try {
                 
 
@@ -249,7 +251,33 @@ namespace TestHelloWorld
                     sql_cmnd.Parameters.AddWithValue("@AMOUNT", SqlDbType.Decimal).Value = amount;
                     sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
                     sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
-                    sql_cmnd.ExecuteNonQueryAsync();
+                    sql_cmnd.ExecuteNonQuery();
+                    _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                    connection.Close();
+                }
+            }
+            catch (Exception Ex) {
+                throw;
+            }
+        }
+
+        public static async void ProcessDirectPayAsync(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
+            try {
+
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    _logger.LogDebug(1, transactionId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+
+                    await connection.OpenAsync().ConfigureAwait(false);
+                    _logger.LogDebug(2, transactionId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                    SqlCommand sql_cmnd = new SqlCommand("USP_DIRECT_PAY", connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@SENDER_VID", SqlDbType.NVarChar).Value = senderVid;
+                    sql_cmnd.Parameters.AddWithValue("@RECEIVER_VID", SqlDbType.NVarChar).Value = receiverVid;
+                    sql_cmnd.Parameters.AddWithValue("@AMOUNT", SqlDbType.Decimal).Value = amount;
+                    sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
+                    sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
+                    await sql_cmnd.ExecuteNonQueryAsync().ConfigureAwait(false);
                     _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     connection.Close();
                 }
