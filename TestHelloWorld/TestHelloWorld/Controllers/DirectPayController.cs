@@ -58,7 +58,7 @@ namespace TestHelloWorld.Controllers
                 decimal.TryParse(amountstr, out amount);
 
                 decimal availBalance = 0;
-                DBUtility.ProcessDirectPay(sendervid, receiverVid, amount, transactionId, clientRequestTime, _logger);
+                DBUtility.ProcessDirectPayAsync(sendervid, receiverVid, amount, transactionId, clientRequestTime, _logger);
 
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
