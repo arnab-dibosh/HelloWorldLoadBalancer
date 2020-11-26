@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,25 +29,10 @@ namespace TestHelloWorld
         {
             services.AddLogging(config =>
             {
-                // clear out default configuration
-                //config.ClearProviders();
-
-                //config.AddConfiguration(Configuration.GetSection("Logging"));
-                //config.AddDebug();
-                //config.AddEventSourceLogger();
-
-                //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
-                //{
-                //    config.AddConsole();
-                //}
-
-
+               
             });
 
             services.AddControllers(options => options.Filters.Add<LogRequestTimeFilterAttribute>());
-            services.AddDbContext<TestDbContext>(options =>
-              options.UseSqlServer(
-                  Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -75,7 +59,6 @@ namespace TestHelloWorld
             {
                 endpoints.MapControllers();
             });
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c => {

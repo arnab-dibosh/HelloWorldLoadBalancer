@@ -13,11 +13,10 @@ namespace TestHelloWorld
     public class DBUtility
     {
 
-        private static string _mConString = "";
+        private static string _mConString = @"Server=DESKTOP-QS1VJGL\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = "Server=192.168.1.33;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
         public static string ConnectionString
         {
-
             set
             {
                 _mConString = value;
@@ -27,82 +26,50 @@ namespace TestHelloWorld
                 return _mConString;
             }
         }
+             
 
-        public static void InsertTable(string transId, string message, string dockerName, string clientRequestTime, string apiRequestStartTime, ILogger<BaseController> _logger)
-        {
-            try
-            {
-                string createTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
-                string query = "INSERT INTO LoadBalancer " + "(TransactionId, Message, DockerName, ClientRequestTime, ApiRequestStartTime, CreateTime) " +
-                    "VALUES('" + transId + "', '" + message + "', '" + dockerName +
-                    "', '" + clientRequestTime +
-                    "', '" + apiRequestStartTime +
-                    "', '" + createTime +
-                    "');";
-                _logger.LogDebug(2, transId + "|B4CON- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                //TIME STAMP SQL1
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    _logger.LogDebug(3, transId + "|B4COM- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        _logger.LogDebug(4, transId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        connection.Open();
-                        _logger.LogDebug(5, transId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        command.ExecuteNonQuery();
-                        _logger.LogDebug(6, transId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        connection.Close();
-                        _logger.LogDebug(7, transId + "|ACLOSE- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                    }
-                }
-                //TIME STAMP SQL2
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            //return true;
-        }
-
-        public static bool InsertExceptionLogTable(string transId, string expMessage, string dockerName, string createTime)
-        {
-            try
-            {
-                string query = "INSERT INTO ExceptionLog " + "(TransactionId, ExceptionText, DockerName, CreateTime) " +
-                    "VALUES('" + transId + "', '" + expMessage + "', '" + dockerName +
-                    "', '" + createTime + "');";
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        connection.Close();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return true;
-        }
-
-        public static bool InsertTransaction(Transaction transaction) {
+        public static bool OneInsertDynamicSqlNoLog(string transactionId, string senderVid, string senderAccNo, int senderBankId,
+            string receicerVid, string receiverAccNo, int receicerBankId, decimal amount, DateTime tranDate, string clientRequestTime, string tableName) {
             try {
-                string query = "INSERT INTO Transactions " + "(TransactionId,SenderVid,SenderAccNo,SenderBankId,ReceicerVid,ReceiverAccNo,ReceicerBankId,Amount,TranDate,ClientRequestTime) " +
-                    "VALUES('" + transaction.TransactionId + "', '" + transaction.SenderVid + "', '" + transaction.SenderAccNo +
-                    "', '" + transaction.SenderBankId + "', '" + transaction.ReceicerVid +
-                    "', '" + transaction.ReceiverAccNo + "', '" + transaction.ReceicerBankId +
-                    "', '" + transaction.Amount + "', '" + transaction.TranDate +
-                    "', '" + transaction.ClientRequestTime + "');";
+                string query = "INSERT INTO " + tableName + "(TransactionId,SenderVid,SenderAccNo,SenderBankId,ReceicerVid,ReceiverAccNo,ReceicerBankId,Amount,TranDate,ClientRequestTime) " +
+                    "VALUES('" + transactionId + "', '" + senderVid + "', '" + senderAccNo +
+                    "', '" + senderBankId + "', '" + receicerVid +
+                    "', '" + receiverAccNo + "', '" + receicerBankId +
+                    "', '" + amount + "', '" + tranDate +
+                    "', '" + clientRequestTime + "');";
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
                         command.ExecuteNonQuery();
                         connection.Close();
+                    }
+                }
+            }
+            catch (Exception ex) {
+                throw;
+            }
+            return true;
+        }
+
+        public static bool OneInsertDynamicSqlWithLog(string transactionId, string senderVid, string senderAccNo, int senderBankId,
+            string receicerVid, string receiverAccNo, int receicerBankId, decimal amount, DateTime tranDate, string clientRequestTime, string tableName, ILogger<DynamicSqlController> _logger) {
+            try {
+                string query = "INSERT INTO " + tableName + "(TransactionId,SenderVid,SenderAccNo,SenderBankId,ReceicerVid,ReceiverAccNo,ReceicerBankId,Amount,TranDate,ClientRequestTime) " +
+                    "VALUES('" + transactionId + "', '" + senderVid + "', '" + senderAccNo +
+                    "', '" + senderBankId + "', '" + receicerVid +
+                    "', '" + receiverAccNo + "', '" + receicerBankId +
+                    "', '" + amount + "', '" + tranDate +
+                    "', '" + clientRequestTime + "');";
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    using (SqlCommand command = new SqlCommand(query, connection)) {
+                        _logger.LogDebug(1, transactionId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                        connection.Open();
+                        _logger.LogDebug(2, transactionId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                        _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     }
                 }
             }
@@ -116,16 +83,16 @@ namespace TestHelloWorld
             var user = new User();
 
             string query = $"select * from Users where VID='{vid}'";
-            try {                
-                
+            try {
+
                 DataTable dataTable = new DataTable();
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();                        
+                        SqlDataReader reader = command.ExecuteReader();
 
                         while (reader.Read()) {
-                            user.AccountNo=reader["AccountNo"].ToString();
+                            user.AccountNo = reader["AccountNo"].ToString();
                             user.BankId = Convert.ToInt32(reader["BankId"]);
                         }
                         reader.Close();
@@ -139,112 +106,29 @@ namespace TestHelloWorld
             return user;
         }
 
-        public static Bank GetBank(int bankId) {
-            var bank = new Bank();
-
-            string query = $"select * from Banks where id={bankId}";
+        public static void OneInsertSpTran(string transactionId, string clientRequestTime, string spName) {
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    using (SqlCommand command = new SqlCommand(query, connection)) {
-                        connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
-
-                        while (reader.Read()) {
-                            bank.Name = reader["Name"].ToString();
-                        }
-                        reader.Close();
-                        connection.Close();
-                    }
-                }
-            }
-            catch (Exception ex) {
-                throw;
-            }
-            return bank;
-        }
-
-        public static bool InsertApiResponseTimeTable(string transId, string apiResponseTime)
-        {
-            try
-            {
-                string query = "INSERT INTO ApiResponseTime " + "(TransactionId, ApiResponseTime) " +
-                    "VALUES('" + transId + "', '" + apiResponseTime + "');";
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        connection.Close();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return true;
-        }
-
-        public static void InsertTransactionsTable(string accountNumber, string amount, string transId, string clientRequestTime, ILogger<BaseController> _logger)
-        {
-            try
-            {
-                string query = "INSERT INTO Transactions " + "(AccountNumber, Amount, TransactionId, ClientRequestTime) " +
-                    "VALUES('" + accountNumber + "', '" + amount + "', '" + transId + "', '" + clientRequestTime + "');";
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        _logger.LogDebug(4, transId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        connection.Open();
-                        _logger.LogDebug(5, transId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        command.ExecuteNonQuery();
-                        _logger.LogDebug(6, transId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                        connection.Close();
-                        _logger.LogDebug(7, transId + "|ACLOSE- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            //return true;
-        }
-
-        public static bool IsServerConnected(string connectionString)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    if (connection.State == System.Data.ConnectionState.Closed)
-                        connection.Open();
-
-                    return true;
-                }
-                catch (SqlException)
-                {
-                    return false;
-                }
-            }
-        }
-
-        public static void ProcessDirectPay(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
-            try {
-                
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    _logger.LogDebug(1, transactionId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     connection.Open();
-                    _logger.LogDebug(2, transactionId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                    SqlCommand sql_cmnd = new SqlCommand("USP_DIRECT_PAY", connection);
+                    SqlCommand sql_cmnd = new SqlCommand(spName, connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
+                    sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
+                    sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            catch (Exception Ex) {
+                throw;
+            }
+        }
+        public static void TwoGetOneInsertSpTran(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, string spName) {
+            try {                
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    connection.Open();
+                    SqlCommand sql_cmnd = new SqlCommand(spName, connection);
                     sql_cmnd.CommandType = CommandType.StoredProcedure;
                     sql_cmnd.Parameters.AddWithValue("@SENDER_VID", SqlDbType.NVarChar).Value = senderVid;
                     sql_cmnd.Parameters.AddWithValue("@RECEIVER_VID", SqlDbType.NVarChar).Value = receiverVid;
@@ -252,7 +136,6 @@ namespace TestHelloWorld
                     sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
                     sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
                     sql_cmnd.ExecuteNonQuery();
-                    _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
                     connection.Close();
                 }
             }
@@ -261,16 +144,13 @@ namespace TestHelloWorld
             }
         }
 
-        public static async void ProcessDirectPayAsync(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, ILogger<DirectPayController> _logger) {
+        public static async void TwoGetOneInsertSpTranAsynch(string senderVid, string receiverVid, decimal amount, string transactionId, string clientRequestTime, string spName) {
             try {
-
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    _logger.LogDebug(1, transactionId + "|B4OPEN- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {                    
 
                     await connection.OpenAsync().ConfigureAwait(true);
-                    _logger.LogDebug(2, transactionId + "|AOPEN-B4EX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
-                    SqlCommand sql_cmnd = new SqlCommand("USP_DIRECT_PAY", connection);
+                    
+                    SqlCommand sql_cmnd = new SqlCommand(spName, connection);
                     sql_cmnd.CommandType = CommandType.StoredProcedure;
                     sql_cmnd.Parameters.AddWithValue("@SENDER_VID", SqlDbType.NVarChar).Value = senderVid;
                     sql_cmnd.Parameters.AddWithValue("@RECEIVER_VID", SqlDbType.NVarChar).Value = receiverVid;
@@ -278,7 +158,7 @@ namespace TestHelloWorld
                     sql_cmnd.Parameters.AddWithValue("@TRANSACTION_ID", SqlDbType.NVarChar).Value = transactionId;
                     sql_cmnd.Parameters.AddWithValue("@CLIENT_REQUEST_TIME", SqlDbType.DateTime2).Value = clientRequestTime;
                     await sql_cmnd.ExecuteNonQueryAsync().ConfigureAwait(true);
-                    _logger.LogDebug(3, transactionId + "|AEX- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                    
                     connection.Close();
                 }
             }

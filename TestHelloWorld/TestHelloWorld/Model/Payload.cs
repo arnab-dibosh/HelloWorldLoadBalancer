@@ -8,5 +8,7 @@ namespace TestHelloWorld.Model
     public class Payload
     {
         public string xmlData { get; set; }
+        public string transactionId { get; set; }
+        public string clientRequestTime { get; set; }
     }
 }
