@@ -30,7 +30,7 @@ namespace TestHelloWorld.Controllers
 
 
         [HttpPost("/OneInsertWithSpTran", Name = "OneInsertWithSpTran")]
-        public string OneInsertWithSpTran([FromBody] Payload payload) {
+        public string OneInsertWithSpTran([FromBody] SimplePayload payload) {
             
             try {
                 DBUtility.OneInsertSpTran(payload.transactionId, payload.clientRequestTime, "SP_OneInsertWithSpTran");
@@ -42,7 +42,7 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/TwoGetOneInsertSpTran", Name = "TwoGetOneInsertSpTran")]
-        public IActionResult TwoGetOneInsertSpTran([FromBody] Payload payload) {
+        public IActionResult TwoGetOneInsertSpTran([FromBody] SimplePayload payload) {
             try {
                 string sendervid = "arnab@user.idtp", receiverVid = "nesar@user.idtp";
                 decimal amount = 2;
