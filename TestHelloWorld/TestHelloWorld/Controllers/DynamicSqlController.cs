@@ -58,7 +58,7 @@ namespace TestHelloWorld.Controllers
                 var senderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
                 DBUtility.OneInsertDynamicSqlNoLog(transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId, 
-                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, clientRequestTime, "OneInsertDynamicSqlTran");
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, clientRequestTime, "TwoGetOneInsertDynamicSqlTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
@@ -91,7 +91,7 @@ namespace TestHelloWorld.Controllers
                 var senderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
                 DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId,
-                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlXmlTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
@@ -133,7 +133,7 @@ namespace TestHelloWorld.Controllers
                 var senderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
                 DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId,
-                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlXmlDecryptTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }

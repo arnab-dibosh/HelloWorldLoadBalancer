@@ -112,7 +112,7 @@ namespace TestHelloWorld.Controllers
                 decimal amount = 0;
                 decimal.TryParse(amountstr, out amount);
 
-                DBUtility.TwoGetOneInsertSpTran(sendervid, receiverVid, amount, payload.transactionId, payload.clientRequestTime, "SP_TwoGetOneInsertSPXmlTran");
+                DBUtility.TwoGetOneInsertSpTran(sendervid, receiverVid, amount, payload.transactionId, payload.clientRequestTime, "SP_TwoGetOneInsertSPXmlDecryptTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
