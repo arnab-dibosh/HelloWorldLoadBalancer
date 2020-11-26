@@ -30,10 +30,10 @@ namespace TestHelloWorld.Controllers
 
 
         [HttpPost("/OneInsertWithSpTran", Name = "OneInsertWithSpTran")]
-        public string OneInsertWithSpTran(string transactionId, string clientRequestTime) {
-            string retVal = transactionId;
+        public string OneInsertWithSpTran([FromBody] Payload payload) {
+            
             try {
-                DBUtility.OneInsertSpTran(transactionId, clientRequestTime, "SP_OneInsertWithSpTran");
+                DBUtility.OneInsertSpTran(payload.transactionId, payload.clientRequestTime, "SP_OneInsertWithSpTran");
                 return "Direct Pay Successfull";
             }
             catch (Exception ex) {
@@ -42,11 +42,11 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/TwoGetOneInsertSpTran", Name = "TwoGetOneInsertSpTran")]
-        public IActionResult TwoGetOneInsertSpTran(string transactionId, string clientRequestTime) {
+        public IActionResult TwoGetOneInsertSpTran([FromBody] Payload payload) {
             try {
                 string sendervid = "arnab@user.idtp", receiverVid = "nesar@user.idtp";
                 decimal amount = 2;
-                DBUtility.TwoGetOneInsertSpTran(sendervid, receiverVid, amount, transactionId, clientRequestTime, "SP_TwoGetOneInsertSpTran");
+                DBUtility.TwoGetOneInsertSpTran(sendervid, receiverVid, amount, payload.transactionId, payload.clientRequestTime, "SP_TwoGetOneInsertSpTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }

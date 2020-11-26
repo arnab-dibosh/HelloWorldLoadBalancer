@@ -11,4 +11,10 @@ namespace TestHelloWorld.Model
         public string transactionId { get; set; }
         public string clientRequestTime { get; set; }
     }
+
+    public class SimplePayload
+    {
+        public string transactionId { get; set; }
+        public string clientRequestTime { get; set; }
+    }
 }

@@ -23,12 +23,11 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/OneInsertDynamicSqlTran", Name = "OneInsertDynamicSqlTran")]
-        public string OneInsertDynamicSqlTran(string transactionId, string clientRequestTime)
+        public string OneInsertDynamicSqlTran([FromBody] SimplePayload payload)
         {
-            string retVal = transactionId;
             try
             {
-                DBUtility.OneInsertDynamicSqlNoLog(transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, clientRequestTime, "OneInsertDynamicSqlTran");             
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");             
                 return "Direct Pay Successfull";
             }
             catch (Exception ex)
@@ -39,10 +38,10 @@ namespace TestHelloWorld.Controllers
 
 
         [HttpPost("/OneInsertDynamicSqlWithLogTran", Name = "OneInsertDynamicSqlWithLogTran")]
-        public string OneInsertDynamicSqlWithLogTran(string transactionId, string clientRequestTime) {
-            string retVal = transactionId;
+        public string OneInsertDynamicSqlWithLogTran([FromBody] SimplePayload payload) {
+            
             try {
-                DBUtility.OneInsertDynamicSqlWithLog(transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, clientRequestTime, "OneInsertDynamicSqlTran", _logger);
+                DBUtility.OneInsertDynamicSqlWithLog(payload.transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran", _logger);
                 return "Direct Pay Successfull";
             }
             catch (Exception ex) {
@@ -51,14 +50,14 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/TwoGetOneInsertDynamicSqlTran", Name = "TwoGetOneInsertDynamicSqlTran")]
-        public IActionResult TwoGetOneInsertDynamicSqlTran(string transactionId, string clientRequestTime) {
+        public IActionResult TwoGetOneInsertDynamicSqlTran([FromBody] SimplePayload payload) {
             try {
                 string sendervid = "arnab@user.idtp", receiverVid = "nesar@user.idtp";
                 decimal amount = 2;
                 var senderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
-                DBUtility.OneInsertDynamicSqlNoLog(transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId, 
-                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, clientRequestTime, "TwoGetOneInsertDynamicSqlTran");
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId, 
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
