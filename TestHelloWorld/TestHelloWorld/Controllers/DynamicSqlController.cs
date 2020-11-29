@@ -171,6 +171,40 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/TwoGetOneInsertDynamicSqlXmlTranTest", Name = "TwoGetOneInsertDynamicSqlXmlTranTest")]
+        public IActionResult TwoGetOneInsertDynamicSqlXmlTranTest([FromBody] string xmlData)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.LoadXml(xmlData);
+
+                string sendervid = "", receiverVid = "", idtppin = "";
+
+                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                idtppin = doc.GetElementsByTagName("IDTP_PIN").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                if (!idtppin.Equals("123456")) throw new Exception("Invalid Pin");
+
+                decimal amount = 0;
+                decimal.TryParse(amountstr, out amount);
+
+                var senderInfo = DBUtility.GetUser(sendervid);
+                var receiverInfo = DBUtility.GetUser(receiverVid);
+                DBUtility.OneInsertDynamicSqlNoLog(Guid.NewGuid().ToString(), sendervid, senderInfo.AccountNo, senderInfo.BankId,
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, DateTime.Now.ToShortTimeString(), "TwoGetOneInsertDynamicSqlXmlTran");
+
+                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
         [HttpPost("/TwoGetOneInsertDynamicSqlXmlDecryptTran", Name = "TwoGetOneInsertDynamicSqlXmlDecryptTran")]
         public IActionResult TwoGetOneInsertDynamicSqlXmlDecryptTran([FromBody] Payload payload) {
             XmlDocument doc = new XmlDocument();
