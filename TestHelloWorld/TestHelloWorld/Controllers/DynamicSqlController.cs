@@ -22,12 +22,83 @@ namespace TestHelloWorld.Controllers
             _logger = logger;
         }
 
+        [HttpPost("/WriteData", Name = "WriteData")]
+
+        public string WriteData(string transactionId, string clientRequestTime) {
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            string retVal = transactionId;
+            try {
+
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try {
+                    DBUtility.WriteData(transactionId, "Hello-World", strDockerName, clientRequestTime, apiRequestStartTime);
+                }
+                catch (Exception) {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
+        [HttpPost("/WriteDataPayload", Name = "WriteDataPayload")]
+        public string WriteDataPayload([FromBody] SimplePayload payload) {
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try {
+                    DBUtility.WriteData(payload.transactionId, "Hello-World", strDockerName, payload.clientRequestTime, apiRequestStartTime);
+                }
+                catch (Exception) {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
+        [HttpPost("/BaseLineWithXML", Name = "BaseLineWithXML")]
+        public string BaseLineWithXML([FromBody] Payload payload) {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try {
+                    DBUtility.WriteData(payload.transactionId, "Hello-World", strDockerName, payload.clientRequestTime, apiRequestStartTime);
+                }
+                catch (Exception) {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
         [HttpPost("/OneInsertDynamicSqlTran", Name = "OneInsertDynamicSqlTran")]
         public string OneInsertDynamicSqlTran([FromBody] SimplePayload payload)
         {
             try
             {
-                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");             
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, "arnab", "accountno", 1, "receiver", "accountno", 
+                    2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");             
                 return "Direct Pay Successfull";
             }
             catch (Exception ex)
@@ -104,7 +175,51 @@ namespace TestHelloWorld.Controllers
         public IActionResult TwoGetOneInsertDynamicSqlXmlDecryptTran([FromBody] Payload payload) {
             XmlDocument doc = new XmlDocument();
             try {
+
                 doc.LoadXml(payload.xmlData);
+
+                RSA idtpPrivate = RSA.Create();
+                RSA idtpPublic = RSA.Create();
+                RSA sampleBankPrivate = RSA.Create();
+                RSA sampleBankPublic = RSA.Create();
+
+                sampleBankPrivate.FromXmlString(IDTPCryptography.bankPrivateKey);
+                idtpPublic.FromXmlString(IDTPCryptography.idtpPublicKey);
+                IDTPCryptography cryptography = new IDTPCryptography();
+                doc = cryptography.DecryptAndValidateSignature(doc, sampleBankPrivate, idtpPublic);
+
+                string sendervid = "", receiverVid = "", idtppin = "";
+
+                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                idtppin = doc.GetElementsByTagName("IDTP_PIN").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                if (!idtppin.Equals("123456")) throw new Exception("Invalid Pin");
+
+                decimal amount = 0;
+                decimal.TryParse(amountstr, out amount);
+
+                var senderInfo = DBUtility.GetUser(sendervid);
+                var receiverInfo = DBUtility.GetUser(receiverVid);
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId,
+                    receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlXmlDecryptTran");
+
+                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+            }
+            catch (Exception ex) {
+                return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("/TwoGetOneInsertDynamicSqlConstantDecryptTran", Name = "TwoGetOneInsertDynamicSqlConstantDecryptTran")]
+        public IActionResult TwoGetOneInsertDynamicSqlConstantDecryptTran([FromBody] SimplePayload payload) {
+            XmlDocument doc = new XmlDocument();
+            try {
+
+                doc.LoadXml(Constants.XMLData);
 
                 RSA idtpPrivate = RSA.Create();
                 RSA idtpPublic = RSA.Create();

@@ -26,7 +26,31 @@ namespace TestHelloWorld
                 return _mConString;
             }
         }
-             
+
+        public static void WriteData(string transId, string message, string dockerName, string clientRequestTime, string apiRequestStartTime) {
+            try {
+                string createTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+                string query = "INSERT INTO LoadBalancer " + "(TransactionId, Message, DockerName, ClientRequestTime, ApiRequestStartTime, CreateTime) " +
+                    "VALUES('" + transId + "', '" + message + "', '" + dockerName +
+                    "', '" + clientRequestTime +
+                    "', '" + apiRequestStartTime +
+                    "', '" + createTime +
+                    "');";
+
+                
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+
+                    using (SqlCommand command = new SqlCommand(query, connection)) {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
 
         public static bool OneInsertDynamicSqlNoLog(string transactionId, string senderVid, string senderAccNo, int senderBankId,
             string receicerVid, string receiverAccNo, int receicerBankId, decimal amount, DateTime tranDate, string clientRequestTime, string tableName) {
