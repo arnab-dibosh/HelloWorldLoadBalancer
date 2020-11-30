@@ -83,6 +83,38 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/TwoGetOneInsertSPXmlTranWithLog", Name = "TwoGetOneInsertSPXmlTranWithLog")]
+        public IActionResult TwoGetOneInsertSPXmlTranWithLog([FromBody] Payload payload)
+        {
+            XmlDocument doc = new XmlDocument();
+            _logger.LogDebug(1, payload.transactionId + "|APIReceiveTime- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+            try
+            {
+                doc.LoadXml(payload.xmlData);
+
+                string sendervid = "", receiverVid = "", idtppin = "";
+
+                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                idtppin = doc.GetElementsByTagName("IDTP_PIN").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                if (!idtppin.Equals("123456")) throw new Exception("Invalid Pin");
+
+                decimal amount = 0;
+                decimal.TryParse(amountstr, out amount);
+
+                DBUtility.TwoGetOneInsertSpTran(sendervid, receiverVid, amount, payload.transactionId, payload.clientRequestTime, "SP_TwoGetOneInsertSPXmlTran");
+                _logger.LogDebug(1, payload.transactionId + "|APIResponseTime- " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
+                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
         [HttpPost("/TwoGetOneInsertSPXmlDecryptTran", Name = "TwoGetOneInsertSPXmlDecryptTran")]
         public IActionResult TwoGetOneInsertSPXmlDecryptTran([FromBody] Payload payload) {
             XmlDocument doc = new XmlDocument();

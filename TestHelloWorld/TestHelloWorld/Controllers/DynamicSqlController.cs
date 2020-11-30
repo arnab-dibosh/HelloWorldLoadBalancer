@@ -16,7 +16,7 @@ namespace TestHelloWorld.Controllers
     [ApiController]
     public class DynamicSqlController : ControllerBase
     {
-        private readonly ILogger<DynamicSqlController> _logger;        
+        private readonly ILogger<DynamicSqlController> _logger;
         public DynamicSqlController(ILogger<DynamicSqlController> logger)
         {
             _logger = logger;
@@ -24,70 +24,119 @@ namespace TestHelloWorld.Controllers
 
         [HttpPost("/WriteData", Name = "WriteData")]
 
-        public string WriteData(string transactionId, string clientRequestTime) {
+        public string WriteData(string transactionId, string clientRequestTime)
+        {
             string apiRequestStartTime = "";
             apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
 
             string retVal = transactionId;
-            try {
+            try
+            {
 
                 string strDockerName = System.Environment.MachineName;
                 string dtApiResponseTime = string.Empty;
-                try {
+                try
+                {
                     DBUtility.WriteData(transactionId, "Hello-World", strDockerName, clientRequestTime, apiRequestStartTime);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     throw;
                 }
 
                 return "Insert Successfull";
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 throw;
             }
         }
 
         [HttpPost("/WriteDataPayload", Name = "WriteDataPayload")]
-        public string WriteDataPayload([FromBody] SimplePayload payload) {
+        public string WriteDataPayload([FromBody] SimplePayload payload)
+        {
             string apiRequestStartTime = "";
             apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
 
-            try {
+            try
+            {
                 string strDockerName = System.Environment.MachineName;
                 string dtApiResponseTime = string.Empty;
-                try {
+                try
+                {
                     DBUtility.WriteData(payload.transactionId, "Hello-World", strDockerName, payload.clientRequestTime, apiRequestStartTime);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     throw;
                 }
 
                 return "Insert Successfull";
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 throw;
             }
         }
 
         [HttpPost("/BaseLineWithXML", Name = "BaseLineWithXML")]
-        public string BaseLineWithXML([FromBody] Payload payload) {
+        public string BaseLineWithXML([FromBody] Payload payload)
+        {
 
             string apiRequestStartTime = "";
             apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
 
-            try {
+            try
+            {
                 string strDockerName = System.Environment.MachineName;
                 string dtApiResponseTime = string.Empty;
-                try {
+                try
+                {
                     DBUtility.WriteData(payload.transactionId, "Hello-World", strDockerName, payload.clientRequestTime, apiRequestStartTime);
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     throw;
                 }
 
                 return "Insert Successfull";
             }
-            catch (Exception) {
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("/BaseLineXMLNoInsertion", Name = "BaseLineXMLNoInsertion")]
+        public string BaseLineXMLNoInsertion([FromBody] Payload payload)
+        {
+            return "Insert Successfull";
+        }
+
+        [HttpPost("/BaseLineWithXMLString", Name = "BaseLineWithXMLString")]
+        public string BaseLineWithXMLString([FromBody] string xmlData)
+        {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try
+            {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortTimeString(), apiRequestStartTime);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
@@ -122,8 +171,8 @@ namespace TestHelloWorld.Controllers
         {
             try
             {
-                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, "arnab", "accountno", 1, "receiver", "accountno", 
-                    2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");             
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, "arnab", "accountno", 1, "receiver", "accountno",
+                    2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran");
                 return "Direct Pay Successfull";
             }
             catch (Exception ex)
@@ -134,36 +183,42 @@ namespace TestHelloWorld.Controllers
 
 
         [HttpPost("/OneInsertDynamicSqlWithLogTran", Name = "OneInsertDynamicSqlWithLogTran")]
-        public string OneInsertDynamicSqlWithLogTran([FromBody] SimplePayload payload) {
-            
-            try {
+        public string OneInsertDynamicSqlWithLogTran([FromBody] SimplePayload payload)
+        {
+
+            try
+            {
                 DBUtility.OneInsertDynamicSqlWithLog(payload.transactionId, "", "", 1, "", "", 2, 1, DateTime.Now, payload.clientRequestTime, "OneInsertDynamicSqlTran", _logger);
                 return "Direct Pay Successfull";
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }
 
         [HttpPost("/TwoGetOneInsertDynamicSqlTran", Name = "TwoGetOneInsertDynamicSqlTran")]
-        public IActionResult TwoGetOneInsertDynamicSqlTran([FromBody] SimplePayload payload) {
-            try {
+        public IActionResult TwoGetOneInsertDynamicSqlTran([FromBody] SimplePayload payload)
+        {
+            try
+            {
                 string sendervid = "arnab@user.idtp", receiverVid = "nesar@user.idtp";
                 decimal amount = 2;
                 var senderInfo = DBUtility.GetUser(sendervid);
                 var receiverInfo = DBUtility.GetUser(receiverVid);
-                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId, 
+                DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId,
                     receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlTran");
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
         [HttpPost("/TwoGetOneInsertDynamicSqlXmlTran", Name = "TwoGetOneInsertDynamicSqlXmlTran")]
-        public IActionResult TwoGetOneInsertDynamicSqlXmlTran([FromBody]Payload payload)
+        public IActionResult TwoGetOneInsertDynamicSqlXmlTran([FromBody] Payload payload)
         {
             XmlDocument doc = new XmlDocument();
             try
@@ -231,9 +286,11 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/TwoGetOneInsertDynamicSqlXmlDecryptTran", Name = "TwoGetOneInsertDynamicSqlXmlDecryptTran")]
-        public IActionResult TwoGetOneInsertDynamicSqlXmlDecryptTran([FromBody] Payload payload) {
+        public IActionResult TwoGetOneInsertDynamicSqlXmlDecryptTran([FromBody] Payload payload)
+        {
             XmlDocument doc = new XmlDocument();
-            try {
+            try
+            {
 
                 doc.LoadXml(payload.xmlData);
 
@@ -267,16 +324,19 @@ namespace TestHelloWorld.Controllers
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
 
         [HttpPost("/TwoGetOneInsertDynamicSqlConstantDecryptTran", Name = "TwoGetOneInsertDynamicSqlConstantDecryptTran")]
-        public IActionResult TwoGetOneInsertDynamicSqlConstantDecryptTran([FromBody] SimplePayload payload) {
+        public IActionResult TwoGetOneInsertDynamicSqlConstantDecryptTran([FromBody] SimplePayload payload)
+        {
             XmlDocument doc = new XmlDocument();
-            try {
+            try
+            {
 
                 doc.LoadXml(Constants.XMLData);
 
@@ -310,7 +370,8 @@ namespace TestHelloWorld.Controllers
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
