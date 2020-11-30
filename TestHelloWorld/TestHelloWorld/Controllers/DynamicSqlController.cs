@@ -107,8 +107,8 @@ namespace TestHelloWorld.Controllers
             }
         }
 
-        [HttpPost("/BaseLineXMLNoLoading", Name = "BaseLineXMLNoLoading")]
-        public string BaseLineXMLNoLoading([FromBody] Payload payload)
+        [HttpPost("/BaseLineXMLNoInsertion", Name = "BaseLineXMLNoInsertion")]
+        public string BaseLineXMLNoInsertion([FromBody] Payload payload)
         {
             return "Insert Successfull";
         }
