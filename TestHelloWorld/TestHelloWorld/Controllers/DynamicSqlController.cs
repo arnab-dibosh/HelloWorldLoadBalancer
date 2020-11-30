@@ -92,6 +92,31 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+
+        [HttpPost("/BaseLineWithXMLDeserialize", Name = "BaseLineWithXMLDeserialize")]
+        public string BaseLineWithXMLDeserialize([FromBody] string xmlData) {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, "2020-01-01", apiRequestStartTime);
+                }
+                catch (Exception) {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
+
         [HttpPost("/OneInsertDynamicSqlTran", Name = "OneInsertDynamicSqlTran")]
         public string OneInsertDynamicSqlTran([FromBody] SimplePayload payload)
         {
