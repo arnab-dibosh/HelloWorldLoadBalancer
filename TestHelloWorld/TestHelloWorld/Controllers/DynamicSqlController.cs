@@ -10,6 +10,9 @@ using System.Net;
 using TestHelloWorld.Model;
 using System.Security.Cryptography;
 using Cryptography.Services;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections;
 
 namespace TestHelloWorld.Controllers
 {
@@ -22,8 +25,24 @@ namespace TestHelloWorld.Controllers
             _logger = logger;
         }
 
-        [HttpPost("/WriteData", Name = "WriteData")]
+        [HttpPost("/WriteDataBinary", Name = "WriteDataBinary")]
+        public string WriteDataBinary(byte[] bytes) {           
+           
+            try {
+                string xmlData ="";
+                BinaryFormatter formatter = new BinaryFormatter();
+                using (MemoryStream ms = new MemoryStream(bytes)) {
+                    xmlData = (string)formatter.Deserialize(ms);
+                }
+                   
+                return "Decode Successfull";
+            }
+            catch (Exception ex) {
+                return ex.Message;
+            }
+        }
 
+        [HttpPost("/WriteData", Name = "WriteData")]
         public string WriteData(string transactionId, string clientRequestTime)
         {
             string apiRequestStartTime = "";

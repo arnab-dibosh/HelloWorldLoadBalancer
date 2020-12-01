@@ -17,4 +17,9 @@ namespace TestHelloWorld.Model
         public string transactionId { get; set; }
         public string clientRequestTime { get; set; }
     }
+
+    public class BiteArrayPayload
+    {
+        public byte[] binaryData { get; set; }
+    }
 }

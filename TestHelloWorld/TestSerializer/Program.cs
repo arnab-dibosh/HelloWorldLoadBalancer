@@ -3,12 +3,16 @@ using System.IO;
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 
 namespace TestSerializer
 {
     class Program
     {
         static void Main(string[] args) {
+
+            Serialize();
+            Deserialize();
         }
 
         static void Serialize() {
