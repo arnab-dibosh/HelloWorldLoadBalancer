@@ -107,6 +107,90 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/BaseLineWithJson", Name = "BaseLineWithJson")]
+        public string BaseLineWithJson([FromBody] JsonPayload payload)
+        {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try
+            {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortDateString(), apiRequestStartTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("/BaseLineWithEncryptedJson", Name = "BaseLineWithEncryptedJson")]
+        public string BaseLineWithEncryptedJson([FromBody] EncryptedJsonPayload payload)
+        {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try
+            {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortDateString(), apiRequestStartTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("/BaseLineWithDynamicJson", Name = "BaseLineWithDynamicJson")]
+        public string BaseLineWithDynamicJson([FromBody] dynamic payload)
+        {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try
+            {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortDateString(), apiRequestStartTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpPost("/BaseLineXMLNoInsertion", Name = "BaseLineXMLNoInsertion")]
         public string BaseLineXMLNoInsertion([FromBody] Payload payload)
         {
