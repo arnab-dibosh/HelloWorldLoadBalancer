@@ -19,7 +19,18 @@ namespace TestGrpc
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseUrls("http://+:80");
+
+                    webBuilder.ConfigureKestrel(serverOptions => {
+                        serverOptions.Limits.MaxConcurrentConnections = null;
+                        serverOptions.Limits.MaxConcurrentUpgradedConnections = null;
+
+                        serverOptions.Limits.KeepAliveTimeout =
+                            TimeSpan.FromMinutes(2);
+                        serverOptions.Limits.RequestHeadersTimeout =
+                            TimeSpan.FromMinutes(1);
+                    });
+
+                    webBuilder.UseUrls("http://+:5005");
                     webBuilder.UseStartup<Startup>();
                 });
     }
