@@ -13,6 +13,7 @@ using Cryptography.Services;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
+using X509_Signature;
 
 namespace TestHelloWorld.Controllers
 {
@@ -196,6 +197,34 @@ namespace TestHelloWorld.Controllers
                 try
                 {
                     DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortDateString(), apiRequestStartTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return "Insert Successfull";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("/BaseLineWithDynamicJsonAsync", Name = "BaseLineWithDynamicJsonAsync")]
+        public async Task<string> BaseLineWithDynamicJsonAsync([FromBody] dynamic payload)
+        {
+
+            string apiRequestStartTime = "";
+            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+
+            try
+            {
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = string.Empty;
+                try
+                {
+                    await DBUtility.WriteDataAsync(Guid.NewGuid().ToString(), "Hello-World", strDockerName, DateTime.Now.ToShortDateString(), apiRequestStartTime);
                 }
                 catch (Exception)
                 {
@@ -470,6 +499,86 @@ namespace TestHelloWorld.Controllers
                 var receiverInfo = DBUtility.GetUser(receiverVid);
                 DBUtility.OneInsertDynamicSqlNoLog(payload.transactionId, sendervid, senderInfo.AccountNo, senderInfo.BankId,
                     receiverVid, receiverInfo.AccountNo, receiverInfo.BankId, amount, DateTime.Now, payload.clientRequestTime, "TwoGetOneInsertDynamicSqlXmlDecryptTran");
+
+                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("/NewXMLDecryptTran", Name = "NewXMLDecryptTran")]
+        public IActionResult NewXMLDecryptTran([FromBody] Payload payload)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                var decryptedXML = AESEncryptDecrypt.Decrypt(payload.xmlData);
+                var isValidated = X509_Signature.X509_Signature.ValidateSignedinXmlDocument(decryptedXML);
+                doc.LoadXml(decryptedXML);
+
+                string sendervid = "", receiverVid = "";
+
+                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = DateTime.Now.ToShortDateString();
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, dtApiResponseTime, dtApiResponseTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("/PreviousXMLDecryptTran", Name = "PreviousXMLDecryptTran")]
+        public IActionResult PreviousXMLDecryptTran([FromBody] Payload payload)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.LoadXml(payload.xmlData);
+
+                RSA idtpPrivate = RSA.Create();
+                RSA idtpPublic = RSA.Create();
+                RSA sampleBankPrivate = RSA.Create();
+                RSA sampleBankPublic = RSA.Create();
+
+                sampleBankPrivate.FromXmlString(IDTPCryptography.bankPrivateKey);
+                idtpPublic.FromXmlString(IDTPCryptography.idtpPublicKey);
+                IDTPCryptography cryptography = new IDTPCryptography();
+                doc = cryptography.DecryptAndValidateSignature(doc, sampleBankPrivate, idtpPublic);
+
+                string sendervid = "", receiverVid = "";
+
+                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                string amountstr = "";
+                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                string strDockerName = System.Environment.MachineName;
+                string dtApiResponseTime = DateTime.Now.ToShortDateString();
+                try
+                {
+                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, dtApiResponseTime, dtApiResponseTime);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
 
                 return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
             }

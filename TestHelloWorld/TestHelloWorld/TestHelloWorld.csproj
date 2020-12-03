@@ -16,13 +16,28 @@
     <Reference Include="IDTP.Security">
       <HintPath>Library\IDTP.Security.dll</HintPath>
     </Reference>
+    <Reference Include="X509_Signature">
+      <HintPath>Library\X509_Signature.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="my-cert-pfx2.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="my-public-key2.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Security\idtpPrivate.key">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Security\idtpPublic.pub">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Security\my-cert-pfx2.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Security\my-public-key2.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Security\sampleBank1Private.key">
