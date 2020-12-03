@@ -26,7 +26,7 @@ namespace GrpcGreeterClient
                               new HelloRequest { Name = "Hello" });
                     Console.WriteLine(reply.Message);
 
-                   await client.SayHelloWithDbOperationAsync( new Custom() { Stringvalue = "" });
+                   await client.SayHelloWithDbOperationAsync( new HelloRequest() { Name = "" });
                 }
                 catch (Exception) { }
                 

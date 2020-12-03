@@ -13,17 +13,17 @@ namespace TestGrpc
         }
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context) {
-            DBUtility.WriteData(Guid.NewGuid().ToString(), request.Name, "DockerName", "2020-01-01", "2020-01-01");
+           // DBUtility.WriteData(Guid.NewGuid().ToString(), request.Name, "DockerName", "2020-01-01", "2020-01-01");
             return Task.FromResult(new HelloReply {
                 Message = "Return Message From Server"
             });
         }
 
-        public override Task<Custom> SayHelloWithDbOperation(Custom request, ServerCallContext context) {
+        public override Task<HelloReply> SayHelloWithDbOperation(HelloRequest request, ServerCallContext context) {
 
-            DBUtility.WriteData(Guid.NewGuid().ToString(), request.Stringvalue, "DockerName", "2020-01-01", "2020-01-01");
-            return Task.FromResult(new Custom {
-                Stringvalue = "Return Message From Server"
+            DBUtility.WriteData(Guid.NewGuid().ToString(), request.Name, "DockerName", "2020-01-01", "2020-01-01");
+            return Task.FromResult(new HelloReply {
+                Message = "Return Message From Server"
             });
         }
     }
