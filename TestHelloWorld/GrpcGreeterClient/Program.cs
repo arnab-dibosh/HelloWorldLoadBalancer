@@ -23,8 +23,10 @@ namespace GrpcGreeterClient
 
                 try {
                     var reply = await client.SayHelloAsync(
-                              new HelloRequest { Name = Constants.XMLData });
+                              new HelloRequest { Name = "Hello" });
                     Console.WriteLine(reply.Message);
+
+                   await client.SayHelloWithDbOperationAsync( new Custom() { Stringvalue = "" });
                 }
                 catch (Exception) { }
                 
