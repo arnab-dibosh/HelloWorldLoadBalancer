@@ -508,35 +508,41 @@ namespace TestHelloWorld.Controllers
             }
         }
 
-        [HttpPost("/NewXMLDecryptTran", Name = "NewXMLDecryptTran")]
-        public IActionResult NewXMLDecryptTran([FromBody] Payload payload)
+        [HttpPost("/XMLDecryptAndValidationWithOpenSSL", Name = "XMLDecryptAndValidationWithOpenSSL")]
+        public IActionResult XMLDecryptAndValidationWithOpenSSL([FromBody] Payload payload)
         {
             XmlDocument doc = new XmlDocument();
             try
             {
-                var decryptedXML = AESEncryptDecrypt.Decrypt(payload.xmlData);
-                var isValidated = X509_Signature.X509_Signature.ValidateSignedinXmlDocument(decryptedXML);
-                doc.LoadXml(decryptedXML);
-
-                string sendervid = "", receiverVid = "";
-
-                sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
-                receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
-                string amountstr = "";
-                amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
-
-                string strDockerName = System.Environment.MachineName;
-                string dtApiResponseTime = DateTime.Now.ToShortDateString();
-                try
+                doc.LoadXml(payload.xmlData);
+                AESEncryptDecrypt.DecryptXml(doc);
+                var isValidated = X509_Signature.X509_Signature.ValidateSignedinXmlDocument(doc.OuterXml);
+                if (isValidated)
                 {
-                    DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, dtApiResponseTime, dtApiResponseTime);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                    string sendervid = "", receiverVid = "";
 
-                return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+                    sendervid = doc.GetElementsByTagName("DbtrAcct").Item(0).InnerText;
+                    receiverVid = doc.GetElementsByTagName("CdtrAcct").Item(0).InnerText;
+                    string amountstr = "";
+                    amountstr = doc.GetElementsByTagName("IntrBkSttlmAmt").Item(0).InnerText;
+
+                    string strDockerName = System.Environment.MachineName;
+                    string dtApiResponseTime = DateTime.Now.ToShortDateString();
+                    try
+                    {
+                        DBUtility.WriteData(Guid.NewGuid().ToString(), "Hello-World", strDockerName, dtApiResponseTime, dtApiResponseTime);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+
+                    return new JsonResult(new { StatusCode = HttpStatusCode.OK, Message = "Direct Pay Successfull" });
+                }
+                else
+                {
+                    return new JsonResult(new { StatusCode = HttpStatusCode.BadRequest, Message = "XML validation failed" });
+                }
             }
             catch (Exception ex)
             {
@@ -544,8 +550,8 @@ namespace TestHelloWorld.Controllers
             }
         }
 
-        [HttpPost("/PreviousXMLDecryptTran", Name = "PreviousXMLDecryptTran")]
-        public IActionResult PreviousXMLDecryptTran([FromBody] Payload payload)
+        [HttpPost("/XMLDecryptAndValidationWithExistingAlgo", Name = "XMLDecryptAndValidationWithExistingAlgo")]
+        public IActionResult XMLDecryptAndValidationWithExistingAlgo([FromBody] Payload payload)
         {
             XmlDocument doc = new XmlDocument();
             try

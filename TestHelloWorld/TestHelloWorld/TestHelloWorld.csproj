@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Library\X509_Signature.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="my-cert-pfx2.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
