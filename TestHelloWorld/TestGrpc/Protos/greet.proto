@@ -9,6 +9,10 @@ service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
   rpc SayHelloWithDbOperation (HelloRequest) returns (HelloReply);
+  rpc WriteBiDirectionalDataInDb(stream ChatMessage) returns (stream ChatMessage);
+  rpc WriteBiDirectionalDataWithoutDb(stream ChatMessage) returns (stream ChatMessage);
+  rpc WriteServerDataInDb(HelloRequest) returns (stream ReturnCount);
+  rpc WriteServerWithoutDB(HelloRequest) returns (stream ReturnCount);
 }
 
 message Custom {
@@ -24,4 +28,12 @@ message HelloRequest {
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+
+message ChatMessage {
+  string message = 1;
+}
+
+message ReturnCount {
+  int32 Count = 1;
 }
