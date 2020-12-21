@@ -13,6 +13,7 @@ service Greeter {
   rpc WriteBiDirectionalDataWithoutDb(stream ChatMessage) returns (stream ChatMessage);
   rpc WriteServerDataInDb(HelloRequest) returns (stream ReturnCount);
   rpc WriteServerWithoutDB(HelloRequest) returns (stream ReturnCount);
+  rpc TransferFundsNoperation(Custom) returns (stream Custom);
 }
 
 message Custom {

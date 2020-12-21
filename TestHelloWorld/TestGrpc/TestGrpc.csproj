@@ -13,4 +13,28 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="IDTP.Security">
+      <HintPath>Libraries\IDTP.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPDTOs">
+      <HintPath>Libraries\IDTPDTOs.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPExceptions">
+      <HintPath>Libraries\IDTPExceptions.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPGateway">
+      <HintPath>Libraries\IDTPGateway.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPManagers">
+      <HintPath>Libraries\IDTPManagers.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPPlatformServices">
+      <HintPath>Libraries\IDTPPlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="IDTPUtils">
+      <HintPath>Libraries\IDTPUtils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

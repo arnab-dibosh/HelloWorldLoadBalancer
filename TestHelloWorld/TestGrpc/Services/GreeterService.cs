@@ -66,5 +66,18 @@ namespace TestGrpc
             await responseStream.WriteAsync(new ReturnCount { Count = count });
 
         }
+
+        public override async Task TransferFundsNoperation(Custom request, IServerStreamWriter<Custom> responseStream, ServerCallContext context) {
+            string response = string.Empty;
+            IDTPGateway.IDTPGateway _gateway = new IDTPGateway.IDTPGateway();
+            try {
+                response = _gateway.TFXMLtoDTOWithSerializerAddTran(request.Stringvalue);
+            }
+            catch (Exception e) {
+                await responseStream.WriteAsync(new Custom { Stringvalue = "Error" });
+            }
+
+            await responseStream.WriteAsync(new Custom { Stringvalue = "Sucess" });
+        }
     }
 }
