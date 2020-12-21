@@ -19,18 +19,17 @@ namespace GrpcGreeterClient
 
             Console.WriteLine("Client Started");
 
-            for (int i = 0; i < 5000; i++) {
+            for (int i = 0; i < 2; i++) {
 
                 try {
-                    var reply = await client.SayHelloAsync(
-                              new HelloRequest { Name = "Hello" });
-                    Console.WriteLine(reply.Message);
-
-                   await client.SayHelloWithDbOperationAsync( new HelloRequest() { Name = "" });
+                    var reply = await client.TransferFundsOperationCSVAsync(new Custom() { Stringvalue = "Hello" });
+                    Console.WriteLine("Error: " + reply.Stringvalue);
                 }
-                catch (Exception) { }
-                
+                catch (Exception ex) {
+                    Console.WriteLine("Error: " + ex.Message);
+                }                
             }
+            Console.ReadKey();
         }
     }
 }
