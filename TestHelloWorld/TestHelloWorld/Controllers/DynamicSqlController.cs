@@ -71,6 +71,7 @@ namespace TestHelloWorld.Controllers
                 throw;
             }
         }
+        
 
         [HttpPost("/WriteDataPayload", Name = "WriteDataPayload")]
         public string WriteDataPayload([FromBody] SimplePayload payload)

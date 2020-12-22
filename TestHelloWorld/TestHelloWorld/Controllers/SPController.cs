@@ -55,6 +55,30 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/TransferFundSingleTable", Name = "TransferFundSingleTable")]
+        public string TransferFundSingleTable([FromBody] SimplePayload payload) {
+            
+            try {
+                DBUtility.TransferFundInsert(payload.transactionId, "AddTransaction_Comb");
+                return "Insert Successfull";
+            }
+            catch (Exception ex) {
+                return ex.Message;
+            }
+        }
+
+        [HttpPost("/TransferFundTwoTable", Name = "TransferFundTwoTable")]
+        public string TransferFundTwoTable([FromBody] SimplePayload payload) {
+
+            try {
+                DBUtility.TransferFundInsert(payload.transactionId, "AddTransaction_Split");
+                return "Insert Successfull";
+            }
+            catch (Exception ex) {
+                return ex.Message;
+            }
+        }
+
         [HttpPost("/TwoGetOneInsertSPXmlTran", Name = "TwoGetOneInsertSPXmlTran")]
         public IActionResult TwoGetOneInsertSPXmlTran([FromBody] Payload payload) {
             XmlDocument doc = new XmlDocument();
