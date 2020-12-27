@@ -79,6 +79,21 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/TransferFundNoXmlCsv", Name = "TransferFundNoXmlCsv")]
+        public string TransferFundNoXmlCsv([FromBody] PayloadXml payload)
+        {
+
+            try
+            {
+                DBUtility.TransferFundFinalSp("AddTransaction_V2");
+                return "Insert Successfull";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         [HttpPost("/TwoGetOneInsertSPXmlTran", Name = "TwoGetOneInsertSPXmlTran")]
         public IActionResult TwoGetOneInsertSPXmlTran([FromBody] Payload payload) {
             XmlDocument doc = new XmlDocument();
