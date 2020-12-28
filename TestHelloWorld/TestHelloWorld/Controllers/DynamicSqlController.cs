@@ -72,6 +72,19 @@ namespace TestHelloWorld.Controllers
             }
         }
 
+        [HttpPost("/NoWriteDataPayload", Name = "NoWriteDataPayload")]
+        public string NoWriteDataPayload([FromBody] PayloadXml payload) {
+          
+            try {
+                
+                return "Insert Successfull";
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
+
         [HttpPost("/WriteDataPayload", Name = "WriteDataPayload")]
         public string WriteDataPayload([FromBody] SimplePayload payload)
         {

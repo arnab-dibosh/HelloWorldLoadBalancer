@@ -7,14 +7,24 @@ package greet;
 
 // The greeting service definition.
 service Greeter {
-  // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
   rpc SayHelloWithDbOperation (HelloRequest) returns (HelloReply);
+  rpc WriteBiDirectionalDataInDb(stream ChatMessage) returns (stream ChatMessage);
+  rpc WriteBiDirectionalDataWithoutDb(stream ChatMessage) returns (stream ChatMessage);
+  rpc WriteServerDataInDb(HelloRequest) returns (stream ReturnCount);
+  rpc WriteServerWithoutDB(HelloRequest) returns (stream ReturnCount);
+  rpc TransferFundsNoperation(Custom) returns (Custom);
+  rpc TransferFundsOperationFlatXml(Custom) returns (Custom);
+  rpc TransferFundsOperationCSV(Custom) returns (Custom);
+  rpc TransferFundsOperationFlatXmlWithoutStream(Custom) returns (Custom);
+  rpc TransferFundsOperationFlatXmlServerStream(Custom) returns (stream Custom);
+  rpc TransferFundsOperationCSVServerStream(Custom) returns (stream Custom);
 }
 
 message Custom {
   string stringvalue = 1;
 }
+
 
 // The request message containing the user's name.
 message HelloRequest {
@@ -24,4 +34,12 @@ message HelloRequest {
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+
+message ChatMessage {
+  string message = 1;
+}
+
+message ReturnCount {
+  int32 Count = 1;
 }
