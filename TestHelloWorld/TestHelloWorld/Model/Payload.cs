@@ -22,4 +22,9 @@ namespace TestHelloWorld.Model
     {
         public byte[] binaryData { get; set; }
     }
+
+    public class PayloadXml
+    {
+        public string xmlData { get; set; }
+    }
 }

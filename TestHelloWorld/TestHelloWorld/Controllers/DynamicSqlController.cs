@@ -73,7 +73,7 @@ namespace TestHelloWorld.Controllers
         }
 
         [HttpPost("/NoWriteDataPayload", Name = "NoWriteDataPayload")]
-        public string NoWriteDataPayload([FromBody] SimplePayload payload) {
+        public string NoWriteDataPayload([FromBody] PayloadXml payload) {
           
             try {
                 
