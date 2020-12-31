@@ -31,7 +31,7 @@ namespace TestHelloWorld
             {
                
             });
-
+            services.AddMemoryCache();
             services.AddControllers(options => options.Filters.Add<LogRequestTimeFilterAttribute>());
 
             services.AddSwaggerGen(c => {
