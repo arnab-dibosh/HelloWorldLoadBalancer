@@ -34,6 +34,10 @@ namespace TestCache
             //services.AddHostedService<TimedHostedService>(); //Add BackgroundTask Service
             services.AddHostedService<BackgroundService>(); //Add BackgroundTask Service
             services.AddHostedService<BackgroundTransService>();
+            services.AddHostedService<BackgroundTransService2>();
+            services.AddHostedService<BackgroundTransService3>();
+            services.AddHostedService<BackgroundTransService4>();
+            services.AddHostedService<BackgroundTransService5>();
 
 
             services.AddControllers();
