@@ -18,7 +18,6 @@ namespace Helper
             string query = $"select * from Users where VID='{vid}'";
             try {
 
-                DataTable dataTable = new DataTable();
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
@@ -46,8 +45,6 @@ namespace Helper
             string query = $"select * from UserAccountInformation";
             //string query = $"select top 1000 * from UserAccountInformation";
             try {
-
-                DataTable dataTable = new DataTable();
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
@@ -81,7 +78,6 @@ namespace Helper
             //string query = $"select top 1000 * from IDTPUsers";
             try {
 
-                DataTable dataTable = new DataTable();
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
@@ -91,7 +87,7 @@ namespace Helper
                             var user = new User();
                             user.UserId = Convert.ToInt64(reader["UserId"]);
                             user.DefaultFI = Convert.ToInt64(reader["DefaultFI"]);
-                            user.FullName = reader["FullName"].ToString();
+                            //user.FullName = reader["FullName"].ToString();
                             user.VirtualID = reader["VirtualID"].ToString();
                             allUsers.Add(user);
                         }

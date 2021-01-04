@@ -81,8 +81,8 @@ namespace TestCache.Controllers
                 tranDto.ReceiverAccNo = receiverAccInfo.AccountNumber;
                 tranDto.SendingBankRoutingNo = "123456";
                 tranDto.ReceivingBankRoutingNo = "123456";
-                tranDto.SenderBankId = 1;
-                tranDto.ReceiverBankId = 1;
+                tranDto.SenderBankId = senderAccInfo.FinancialInstitutionId;
+                tranDto.ReceiverBankId = receiverAccInfo.FinancialInstitutionId;
 
                 tranDto.PaymentNote = "Payment Note";
                 tranDto.ReferenceIDTP = IdtpRef;
