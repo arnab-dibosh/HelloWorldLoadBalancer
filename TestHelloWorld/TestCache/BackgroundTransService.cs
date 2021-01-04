@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
+using Helper;
 
 namespace TestCache
 {
@@ -38,7 +39,7 @@ namespace TestCache
             if (count == 1) { //do the following iteration only once since it'll 
                               //Block and wait for the next item in the Cached Collection
                 foreach (var item in _idtpTransCache.GetTransCollection()) {
-                    //DBUtility.TransferFundFinalSp(item);
+                    DBUtility.TransferFundFinalSp(item);
                 }
             }
         }

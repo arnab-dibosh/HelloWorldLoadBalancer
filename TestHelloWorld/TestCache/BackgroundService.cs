@@ -40,7 +40,7 @@ namespace TestCache
                               //Block and wait for the next item in the Cached Collection
 
                 foreach (var item in _idtpCache.GetCollection()) {
-                    DBUtility.TransferFundFinalSp(item);
+                    DBUtility.SimpleInsert(item);
                 }
             }
         }
