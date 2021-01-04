@@ -9,7 +9,7 @@ namespace Helper
 {
     public class DBUtility
     {
-        static string ConnectionString = "Server=192.168.1.31;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        public static string ConnectionString = "Server=192.168.1.31;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         //static string ConnectionString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
 
         public static User GetUserByVid(string vid) {
@@ -25,7 +25,7 @@ namespace Helper
 
                         while (reader.Read()) {
                             user.UserId = Convert.ToInt64(reader["UserId"]);
-                            user.FullName = reader["FullName"].ToString();                            
+                            user.FullName = reader["FullName"].ToString();
                         }
                         reader.Close();
                         connection.Close();
@@ -102,40 +102,36 @@ namespace Helper
             return allUsers;
         }
 
-        public static void TransferFundFinalSp(TransactionDTOReq transactionDTO) {
+        public static void TransferFundFinalSp(TransactionDTOReq transactionDTO, SqlConnection connection) {
             try {
 
-                string spname = "AddTransaction_V2";
+                string spname = "AddTransaction_V2";                
+                SqlCommand sql_cmnd = new SqlCommand(spname, connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                #region params
+                sql_cmnd.Parameters.AddWithValue("@SenderAccNo", SqlDbType.VarChar).Value = transactionDTO.SenderAccNo;
+                sql_cmnd.Parameters.AddWithValue("@ReceiverAccNo", SqlDbType.VarChar).Value = transactionDTO.ReceiverAccNo;
+                sql_cmnd.Parameters.AddWithValue("@Amount", SqlDbType.Decimal).Value = Convert.ToDecimal(transactionDTO.Amount);
+                sql_cmnd.Parameters.AddWithValue("@PaymentNote", SqlDbType.VarChar).Value = transactionDTO.PaymentNote;
+                sql_cmnd.Parameters.AddWithValue("@EndToEndID", SqlDbType.VarChar).Value = transactionDTO.EndToEndID;
+                sql_cmnd.Parameters.AddWithValue("@MessageID", SqlDbType.VarChar).Value = transactionDTO.MessageID;
+                sql_cmnd.Parameters.AddWithValue("@SendingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.SendingBankRoutingNo;
+                sql_cmnd.Parameters.AddWithValue("@ReceivingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankRoutingNo;
+                sql_cmnd.Parameters.AddWithValue("@ReferenceSendingBANK", SqlDbType.VarChar).Value = transactionDTO.ReferenceSendingBANK;
+                sql_cmnd.Parameters.AddWithValue("@ReferenceIDTP", SqlDbType.VarChar).Value = transactionDTO.ReferenceIDTP;
+                sql_cmnd.Parameters.AddWithValue("@IPAddress", SqlDbType.VarChar).Value = transactionDTO.IPAddress;
+                sql_cmnd.Parameters.AddWithValue("@LatLong", SqlDbType.VarChar).Value = transactionDTO.LatLong;
+                sql_cmnd.Parameters.AddWithValue("@MobileNumber", SqlDbType.VarChar).Value = transactionDTO.MobileNumber;
+                sql_cmnd.Parameters.AddWithValue("@TransactionTypeId", SqlDbType.Int).Value = Convert.ToInt32(transactionDTO.TransactionTypeId);
+                sql_cmnd.Parameters.AddWithValue("@ReferernceNumber", SqlDbType.VarChar).Value = transactionDTO.IDTPPIN;
+                sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankReference;
+                sql_cmnd.Parameters.AddWithValue("@senderId", SqlDbType.BigInt).Value = transactionDTO.SenderId;
+                sql_cmnd.Parameters.AddWithValue("@receiverId", SqlDbType.BigInt).Value = transactionDTO.ReceiverId;
+                sql_cmnd.Parameters.AddWithValue("@SenderBankId", SqlDbType.Int).Value = transactionDTO.SenderBankId;
+                sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = transactionDTO.ReceiverBankId;
+                #endregion
+                sql_cmnd.ExecuteNonQuery();              
 
-                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    connection.Open();
-                    SqlCommand sql_cmnd = new SqlCommand(spname, connection);
-                    sql_cmnd.CommandType = CommandType.StoredProcedure;
-                    #region params
-                    sql_cmnd.Parameters.AddWithValue("@SenderAccNo", SqlDbType.VarChar).Value = transactionDTO.SenderAccNo;
-                    sql_cmnd.Parameters.AddWithValue("@ReceiverAccNo", SqlDbType.VarChar).Value = transactionDTO.ReceiverAccNo;
-                    sql_cmnd.Parameters.AddWithValue("@Amount", SqlDbType.Decimal).Value = Convert.ToDecimal(transactionDTO.Amount);
-                    sql_cmnd.Parameters.AddWithValue("@PaymentNote", SqlDbType.VarChar).Value = transactionDTO.PaymentNote;
-                    sql_cmnd.Parameters.AddWithValue("@EndToEndID", SqlDbType.VarChar).Value = transactionDTO.EndToEndID;
-                    sql_cmnd.Parameters.AddWithValue("@MessageID", SqlDbType.VarChar).Value = transactionDTO.MessageID;
-                    sql_cmnd.Parameters.AddWithValue("@SendingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.SendingBankRoutingNo;
-                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankRoutingNo;
-                    sql_cmnd.Parameters.AddWithValue("@ReferenceSendingBANK", SqlDbType.VarChar).Value = transactionDTO.ReferenceSendingBANK;
-                    sql_cmnd.Parameters.AddWithValue("@ReferenceIDTP", SqlDbType.VarChar).Value = transactionDTO.ReferenceIDTP;
-                    sql_cmnd.Parameters.AddWithValue("@IPAddress", SqlDbType.VarChar).Value = transactionDTO.IPAddress;
-                    sql_cmnd.Parameters.AddWithValue("@LatLong", SqlDbType.VarChar).Value = transactionDTO.LatLong;
-                    sql_cmnd.Parameters.AddWithValue("@MobileNumber", SqlDbType.VarChar).Value = transactionDTO.MobileNumber;
-                    sql_cmnd.Parameters.AddWithValue("@TransactionTypeId", SqlDbType.Int).Value = Convert.ToInt32(transactionDTO.TransactionTypeId);
-                    sql_cmnd.Parameters.AddWithValue("@ReferernceNumber", SqlDbType.VarChar).Value = transactionDTO.IDTPPIN;
-                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankReference;
-                    sql_cmnd.Parameters.AddWithValue("@senderId", SqlDbType.BigInt).Value = transactionDTO.SenderId;
-                    sql_cmnd.Parameters.AddWithValue("@receiverId", SqlDbType.BigInt).Value =transactionDTO.ReceiverId;
-                    sql_cmnd.Parameters.AddWithValue("@SenderBankId", SqlDbType.Int).Value = transactionDTO.SenderBankId;
-                    sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = transactionDTO.ReceiverBankId;
-                    #endregion
-                    sql_cmnd.ExecuteNonQuery();
-                    connection.Close();
-                }
             }
             catch (Exception ex) {
                 throw ex;
@@ -167,7 +163,7 @@ namespace Helper
                 ReceivingBankRoutingNo = "987543211";
                 int senderId = 1, receiverId = 2, SenderBankId = 1, ReceiverBankId = 2;
 
-                
+
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     connection.Open();
