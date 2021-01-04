@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
+using Helper;
 
 namespace TestCache
 {
@@ -39,7 +40,7 @@ namespace TestCache
                               //Block and wait for the next item in the Cached Collection
 
                 foreach (var item in _idtpCache.GetCollection()) {
-                    DBUtility.SimpleInsert(item);
+                    DBUtility.TransferFundFinalSp(item);
                 }
             }
         }
