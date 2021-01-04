@@ -28,10 +28,13 @@ namespace TestCache
 
 
             services.AddSingleton<IIDTPCache, IDTPCache>();
+            services.AddSingleton<IIDTPTransCache, IDTPTransCache>();
 
             services.AddMemoryCache(); //Add Memory Cache
             //services.AddHostedService<TimedHostedService>(); //Add BackgroundTask Service
             services.AddHostedService<BackgroundService>(); //Add BackgroundTask Service
+            services.AddHostedService<BackgroundTransService>();
+
 
             services.AddControllers();
 

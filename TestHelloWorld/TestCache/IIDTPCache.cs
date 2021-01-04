@@ -9,4 +9,12 @@ namespace TestCache
         IEnumerable<string> GetCollection();
 
     }
+
+    public interface IIDTPTransCache
+    {
+        void SetTransValue(string value);
+
+        IEnumerable<string> GetTransCollection();
+
+    }
 }
