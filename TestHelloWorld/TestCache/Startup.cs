@@ -26,7 +26,7 @@ namespace TestCache
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            services.AddSingleton<ITransactionCache, TransactionCache>();
             services.AddSingleton<IIDTPCache, IDTPCache>();
             services.AddSingleton<IIDTPTransCache, IDTPTransCache>();
 
