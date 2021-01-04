@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Helper.Models;
+using System.Collections.Generic;
 
 namespace TestCache
 {
@@ -12,9 +13,9 @@ namespace TestCache
 
     public interface IIDTPTransCache
     {
-        void SetTransValue(string value);
+        void SetTransValue(TransactionDTOReq value);
 
-        IEnumerable<string> GetTransCollection();
+        IEnumerable<TransactionDTOReq> GetTransCollection();
 
     }
 }

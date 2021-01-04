@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Helper.Models;
 using Helper;
 
 namespace TestCache.Controllers
@@ -14,25 +13,29 @@ namespace TestCache.Controllers
     [Route("[controller]")]
     public class TransactionController : Controller
     {
-        private readonly IIDTPCache _idtpCache;
-        ITransactionCache _transactionCache;
-        public TransactionController(ITransactionCache transactionCache, IIDTPCache idtpCache) {
+        private readonly IIDTPTransCache _idtpTransCache;
+        IMasterDataCache _masterDataCache;
+        public TransactionController(IMasterDataCache masterCache, IIDTPTransCache idtpCache) {
 
-            _transactionCache = transactionCache;
-            _idtpCache = idtpCache;
+            _masterDataCache = masterCache;
+            _idtpTransCache = idtpCache;
         }
 
-        [HttpPost("/PopulateUser", Name = "PopulateUser")]
-        public string PopulateUser() {
+        [HttpPost("/PopulateMasterData", Name = "PopulateMasterData")]
+        public string PopulateMasterData() {
             try {
 
                 List<User> UserList = DBUtility.GetAllUser();
-
+                List<UserAccountInformationDTO> userAccounts = DBUtility.GetAllUserAccountInfo();
                 foreach (var user in UserList) {
-                    _transactionCache.UserDictionary.Add(user.VirtualID, user);
+                    _masterDataCache.UserDictionary.Add(user.VirtualID, user);
                 }
 
-                return $"{UserList.Count} User populated";
+                foreach (var accInfo in userAccounts) {
+                    _masterDataCache.FiDictionary.Add(accInfo.Id, accInfo);
+                }
+
+                return $"{UserList.Count} User {userAccounts.Count} FI populated";
             }
             catch (Exception e) {
                 return e.Message;
@@ -43,38 +46,61 @@ namespace TestCache.Controllers
         public string TransactionFundInsertOnlyCSV([FromBody] Payload payload) {
             try {
 
-                var serviceRequestDTO = new TransactionDTOReq();
+                var tranDto = new TransactionDTOReq();
                 var payLoads = payload.xmlData.Split(",").Select(x => x.Trim()).ToArray();
-                serviceRequestDTO.SenderBankSwiftCode = payLoads[0];
-                serviceRequestDTO.SenderVID = payLoads[1];
-                serviceRequestDTO.ReceiverVID = payLoads[2];
-                //serviceRequestDTO.Amount = payLoads[3];
-                //serviceRequestDTO.ChannelName = payLoads[4];
-                //serviceRequestDTO.DeviceID = payLoads[5];
-                //serviceRequestDTO.MobileNumber = payLoads[6];
-                //serviceRequestDTO.LatLong = payLoads[7];
-                //serviceRequestDTO.IPAddress = payLoads[8];
-                //serviceRequestDTO.IDTPPIN = payLoads[9];
-                //serviceRequestDTO.EndToEndID = payLoads[10];
-                //serviceRequestDTO.SendingBankTxId = payLoads[11];
-                //serviceRequestDTO.ReferenceSendingBANK = payLoads[12];
-                //serviceRequestDTO.MessageID = payLoads[13];
+                tranDto.SenderBankSwiftCode = payLoads[0];
+                tranDto.SenderVID = payLoads[1];
+                tranDto.ReceiverVID = payLoads[2];
+                tranDto.Amount = payLoads[3];
+                tranDto.ChannelName = payLoads[4];
+                tranDto.DeviceID = payLoads[5];
+                tranDto.MobileNumber = payLoads[6];
+                tranDto.LatLong = payLoads[7];
+                tranDto.IPAddress = payLoads[8];
+                tranDto.IDTPPIN = payLoads[9];
+                tranDto.EndToEndID = payLoads[10];
+                tranDto.SendingBankTxId = payLoads[11];
+                tranDto.ReferenceSendingBANK = payLoads[12];
+                tranDto.MessageID = payLoads[13];
 
+                string IdtpRef = "IDTP" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 User sender, receiver;
-                bool senderExists = _transactionCache.UserDictionary.TryGetValue(serviceRequestDTO.SenderVID, out sender);
-                bool receiverExists = _transactionCache.UserDictionary.TryGetValue(serviceRequestDTO.ReceiverVID, out receiver);
+                bool senderExists = _masterDataCache.UserDictionary.TryGetValue(tranDto.SenderVID, out sender);
+                bool receiverExists = _masterDataCache.UserDictionary.TryGetValue(tranDto.ReceiverVID, out receiver);
+                if (!senderExists) throw new Exception("Invalid Sender");
+                if (!receiverExists) throw new Exception("Invalid Receiver");
 
-                if (senderExists && receiverExists)
-                    _idtpCache.SetValue(payload.xmlData);
+                UserAccountInformationDTO senderAccInfo, receiverAccInfo;
+                _masterDataCache.FiDictionary.TryGetValue(sender.DefaultFI, out senderAccInfo);
+                _masterDataCache.FiDictionary.TryGetValue(receiver.DefaultFI, out receiverAccInfo);
+
+                if (tranDto.ChannelName == "Mobile" && tranDto.DeviceID != senderAccInfo.DeviceID)
+                    throw new Exception("Invalid User Device Id");
+
+                tranDto.SenderAccNo = senderAccInfo.AccountNumber;
+                tranDto.ReceiverAccNo = receiverAccInfo.AccountNumber;
+                tranDto.SendingBankRoutingNo = "123456";
+                tranDto.ReceivingBankRoutingNo = "123456";
+                tranDto.SenderBankId = 1;
+                tranDto.ReceiverBankId = 1;
+
+                tranDto.PaymentNote = "Payment Note";
+                tranDto.ReferenceIDTP = IdtpRef;
+                tranDto.TransactionTypeId = "1";
+                tranDto.ReceivingBankReference = "";
+                tranDto.SenderId = sender.UserId;
+                tranDto.ReceiverId = receiver.UserId;
+
+                _idtpTransCache.SetTransValue(tranDto);
 
                 return "Write in memory successfull";
             }
             catch (Exception e) {
                 return e.Message;
             }
-        }       
+        }
 
     }
 
-    
+
 }
