@@ -92,6 +92,7 @@ namespace TestCache.Controllers
                 bool receiverExists = _masterDataCache.UserDictionary.TryGetValue(tranDto.ReceiverVID, out receiver);
                 if (!senderExists) throw new Exception("Invalid Sender");
                 if (!receiverExists) throw new Exception("Invalid Receiver");
+                if(!SecurityService.DecryptAndCheck(tranDto.IDTPPIN, sender.SecretSalt, sender.IDTP_PIN)) throw new Exception("Invalid IDTP PIN");
 
                 UserAccountInformationDTO senderAccInfo, receiverAccInfo;
                 _masterDataCache.FiDictionary.TryGetValue(sender.DefaultFI, out senderAccInfo);

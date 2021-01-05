@@ -38,6 +38,11 @@ namespace TestCache
             services.AddHostedService<BackgroundTransService3>();
             services.AddHostedService<BackgroundTransService4>();
             services.AddHostedService<BackgroundTransService5>();
+            services.AddHostedService<BackgroundTransService6>();
+            services.AddHostedService<BackgroundTransService7>();
+            services.AddHostedService<BackgroundTransService8>();
+            services.AddHostedService<BackgroundTransService9>();
+            services.AddHostedService<BackgroundTransService10>();
 
             services.AddHostedService<MasterDataSynchService>();
 
