@@ -9,7 +9,7 @@ namespace Helper
 {
     public class DBUtility
     {
-        static bool isDevMode = false;
+        static bool isDevMode = true;
 
         public static string localConString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         public static string serverConString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
@@ -106,7 +106,7 @@ namespace Helper
                             user.DefaultFI = Convert.ToInt64(reader["DefaultFI"]);
                             user.VirtualID = reader["VirtualID"].ToString();
                             user.IsLoaded = Convert.ToInt32(reader["IsLoaded"]);
-                            user.IDTP_PIN = reader["VirtualID"].ToString();
+                            user.IDTP_PIN = reader["IDTP_PIN"].ToString();
                             user.SecretSalt = reader["SecretSalt"].ToString();
                             allUsers.Add(user);
                         }

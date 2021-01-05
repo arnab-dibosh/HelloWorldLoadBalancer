@@ -33,7 +33,7 @@ namespace Helper
                 throw;
             }
         }
-        public string EncryptSecret(string secretSalt, string secret)//, out string returnValue)
+        public static string EncryptSecret(string secretSalt, string secret)//, out string returnValue)
         {
             string returnValue;
             //returnValue = String.Empty;
