@@ -25,17 +25,7 @@ namespace TestCache.Controllers
         public string PopulateMasterData() {
             try {
 
-                List<User> UserList = DBUtility.GetAllUser();
-                List<UserAccountInformationDTO> userAccounts = DBUtility.GetAllUserAccountInfo();
-                foreach (var user in UserList) {
-                    _masterDataCache.UserDictionary.Add(user.VirtualID, user);
-                }
-
-                foreach (var accInfo in userAccounts) {
-                    _masterDataCache.FiDictionary.Add(accInfo.Id, accInfo);
-                }
-
-                return $"{UserList.Count} User {userAccounts.Count} FI populated";
+                return IDTPUtility.LoadMasterData(_masterDataCache, true);
             }
             catch (Exception e) {
                 return e.Message;

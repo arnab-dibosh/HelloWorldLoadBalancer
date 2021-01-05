@@ -9,6 +9,7 @@ namespace Helper.Models
         public long UserId { get; set; }
         public string VirtualID { get; set; }
         public string FullName { get; set; }
-        public long DefaultFI { get; set; }        
+        public long DefaultFI { get; set; }
+        public int IsLoaded { get; set; }        
     }
 }
