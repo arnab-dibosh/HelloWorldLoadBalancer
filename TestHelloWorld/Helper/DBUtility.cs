@@ -106,6 +106,8 @@ namespace Helper
                             user.DefaultFI = Convert.ToInt64(reader["DefaultFI"]);
                             user.VirtualID = reader["VirtualID"].ToString();
                             user.IsLoaded = Convert.ToInt32(reader["IsLoaded"]);
+                            user.IDTP_PIN = reader["VirtualID"].ToString();
+                            user.SecretSalt = reader["SecretSalt"].ToString();
                             allUsers.Add(user);
                         }
                         reader.Close();
