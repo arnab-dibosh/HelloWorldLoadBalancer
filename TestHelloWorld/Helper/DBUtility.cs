@@ -41,7 +41,7 @@ namespace Helper
 
         public static List<UserAccountInformationDTO> GetAllUserAccountInfo(bool takeModifiedOnly = false) {
 
-            InsertInLog(0, "Getting Acc Info form db");
+            //InsertInLog(0, "Getting Acc Info form db");
             var allAccInfo = new List<UserAccountInformationDTO>();
             string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
             string query = $"select Id, DeviceID, FinancialInstitutionId, AccountNumber, IsLoaded from UserAccountInformation {whereClause}";
@@ -80,7 +80,7 @@ namespace Helper
 
         public static List<User> GetAllUser(bool takeModifiedOnly = false) {
 
-            InsertInLog(0, "Getting user form db");
+            //InsertInLog(0, "Getting user form db");
 
             var allUsers = new List<User>();
             string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
@@ -151,6 +151,7 @@ namespace Helper
                     sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = transactionDTO.ReceiverBankId;
                     #endregion
                     sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
                 }
             }
             catch (Exception ex) {
