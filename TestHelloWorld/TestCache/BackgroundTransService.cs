@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
 using Helper;
+using System.Diagnostics;
 
 namespace TestCache
 {
@@ -26,8 +27,11 @@ namespace TestCache
             //_logger.LogInformation("Background Service Started.");
 
             //$TODO: the following duraton should be changed after testing
-            _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                    TimeSpan.FromSeconds(6000));
+            //this is the previous timer
+            //_timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(6000));
+            //this timer will call the HelloWorld method after 10 seconds interval
+            _timer = new Timer(HelloWorld, null, 0,
+                    10000);
 
             return Task.CompletedTask;
         }
@@ -45,6 +49,11 @@ namespace TestCache
                 }
             }
             connection.Close();
+        }
+
+        void HelloWorld(object state)
+        {
+            Debug.WriteLine("Hello World!");
         }
 
         public Task StopAsync(CancellationToken stoppingToken) {
