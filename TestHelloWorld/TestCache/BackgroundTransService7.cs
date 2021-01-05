@@ -33,24 +33,17 @@ namespace TestCache
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
-        {
+        private void DoWork(object state) {
             var count = Interlocked.Increment(ref executionCount);
             // _logger.LogInformation("BackgroundService Main Loop Count: {Count}", count);
 
-            SqlConnection connection = new SqlConnection(DBUtility.ConnectionString);
-            connection.Open();
-            if (count == 1)
-            { //do the following iteration only once since it'll 
-              //Block and wait for the next item in the Cached Collection
-                foreach (var item in _idtpTransCache.GetTransCollection())
-                {
-                    DBUtility.TransferFundFinalSp(item, connection);
+            if (count == 1) { //do the following iteration only once since it'll 
+                              //Block and wait for the next item in the Cached Collection
+                foreach (var item in _idtpTransCache.GetTransCollection()) {
+                    DBUtility.TransferFundFinalSp(item);
                 }
             }
-            connection.Close();
         }
-
         public Task StopAsync(CancellationToken stoppingToken)
         {
             //  _logger.LogInformation("Background Service is Stopping.");
