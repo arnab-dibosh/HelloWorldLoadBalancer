@@ -25,7 +25,40 @@ namespace TestCache.Controllers
         public string PopulateMasterData() {
             try {
 
-                return IDTPUtility.LoadMasterData(_masterDataCache, true);
+                return IDTPUtility.LoadMasterData(_masterDataCache, false);
+            }
+            catch (Exception e) {
+                return e.Message;
+            }
+        }
+
+        [HttpGet("/GetUser", Name = "GetUser")]
+        public User GetUser(string vid) {
+            try {
+                var user = _masterDataCache.UserDictionary[vid];
+                return user;
+            }
+            catch (Exception e) {
+                throw e;
+            }
+        }
+
+        [HttpGet("/GetUser", Name = "GetUser")]
+        public UserAccountInformationDTO GetAccounInfo(long id) {
+            try {
+                var accInfo = _masterDataCache.FiDictionary[id];
+                return accInfo;
+            }
+            catch (Exception e) {
+                throw e;
+            }
+        }
+
+        [HttpGet("/ShowMasterData", Name = "ShowMasterData")]
+        public string ShowMasterData() {
+            try {
+
+                return $" User count: {_masterDataCache.UserDictionary.Count}, Fi count: {_masterDataCache.FiDictionary.Count}";
             }
             catch (Exception e) {
                 return e.Message;
@@ -66,6 +99,7 @@ namespace TestCache.Controllers
 
                 if (tranDto.ChannelName == "Mobile" && tranDto.DeviceID != senderAccInfo.DeviceID)
                     throw new Exception("Invalid User Device Id");
+
 
                 tranDto.SenderAccNo = senderAccInfo.AccountNumber;
                 tranDto.ReceiverAccNo = receiverAccInfo.AccountNumber;

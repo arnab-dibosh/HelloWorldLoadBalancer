@@ -23,13 +23,12 @@ namespace TestCache
 
         public Task StartAsync(CancellationToken stoppingToken) {
 
-            _timer = new Timer(DoWork, null, 0, 60000);
-
+            _timer = new Timer(DoWork, null, 0, 30000);
             return Task.CompletedTask;
         }
 
         private void DoWork(object state) {
-
+            DBUtility.InsertInLog(0, "Service fired");
             IDTPUtility.LoadMasterData(_masterDataCache, true);
         }
 

@@ -13,7 +13,7 @@ namespace Helper
 
         public static string localConString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         public static string serverConString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-        public static string ConnectionString = isDevMode? localConString: serverConString;
+        public static string ConnectionString = isDevMode ? localConString : serverConString;
 
         public static User GetUserByVid(string vid) {
             var user = new User();
@@ -41,16 +41,15 @@ namespace Helper
             return user;
         }
 
-        public static List<UserAccountInformationDTO> GetAllUserAccountInfo(bool takeModifiedOnly=false) {
+        public static List<UserAccountInformationDTO> GetAllUserAccountInfo(bool takeModifiedOnly = false) {
 
+            InsertInLog(0, "Getting Acc Info form db");
             var allAccInfo = new List<UserAccountInformationDTO>();
-
+            string top10 = isDevMode ? "top 1000" : "";
             string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
-            string query = $"select Id, DeviceID, FinancialInstitutionId, AccountNumber from UserAccountInformation {whereClause}";
-            
-            if(isDevMode) query = $"select top 1000 * from UserAccountInformation  {whereClause}";
+            string query = $"select {top10} Id, DeviceID, FinancialInstitutionId, AccountNumber, IsLoaded from UserAccountInformation {whereClause}";
 
-            string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
+            string updateQuery = $"update UserAccountInformation set IsLoaded=1 {whereClause}";
 
             try {
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
@@ -70,28 +69,30 @@ namespace Helper
                         reader.Close();
 
                         command.CommandText = updateQuery;
-                       if(!isDevMode) command.ExecuteNonQuery();
+                        if (takeModifiedOnly) command.ExecuteNonQuery();
                         connection.Close();
                     }
                 }
             }
             catch (Exception ex) {
+                InsertInLog(1, $"Error while getting AccInfo form db : {ex.Message}");
                 throw;
             }
             return allAccInfo;
         }
 
+        public static List<User> GetAllUser(bool takeModifiedOnly = false) {
 
-        public static List<User> GetAllUser(bool takeModifiedOnly=false) {
+            InsertInLog(0, "Getting user form db");
 
             var allUsers = new List<User>();
-
+            string top10 = isDevMode ? "top 1000" : "";
             string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
-            string query = $"select UserId, DefaultFI, VirtualID from IDTPUsers {whereClause}";
+            string query = $"select {top10} UserId, DefaultFI, VirtualID, IsLoaded, IDTP_PIN, SecretSalt from IDTPUsers {whereClause}";
 
             string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
 
-            if (isDevMode) query = $"select top 1000 * from IDTPUsers  {whereClause}";
+            if (isDevMode) query = $"select top 1000 UserId, DefaultFI, VirtualID, IsLoaded, IDTP_PIN, SecretSalt from IDTPUsers {whereClause}";
 
             try {
 
@@ -106,19 +107,20 @@ namespace Helper
                             user.DefaultFI = Convert.ToInt64(reader["DefaultFI"]);
                             user.VirtualID = reader["VirtualID"].ToString();
                             user.IsLoaded = Convert.ToInt32(reader["IsLoaded"]);
-                            user.IDTP_PIN = reader["VirtualID"].ToString();
+                            user.IDTP_PIN = reader["IDTP_PIN"].ToString();
                             user.SecretSalt = reader["SecretSalt"].ToString();
                             allUsers.Add(user);
                         }
                         reader.Close();
 
                         command.CommandText = updateQuery;
-                        if (!isDevMode) command.ExecuteNonQuery();
+                        if (takeModifiedOnly) command.ExecuteNonQuery();
                         connection.Close();
                     }
                 }
             }
             catch (Exception ex) {
+                InsertInLog(1, $"Error while getting user form db : {ex.Message}");
                 throw;
             }
             return allUsers;
@@ -160,6 +162,24 @@ namespace Helper
             }
         }
 
+        public static void InsertInLog(int isError, string msg) {
+
+            string query = $"INSERT INTO IDTPErrorLog VALUES (1,1 ,null ,'{msg}' ,'{DateTime.Now}' ,1 ,{isError})";
+
+            try {
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    using (SqlCommand command = new SqlCommand(query, connection)) {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception ex) {
+                throw;
+            }
+        }
 
         public static void TransferFundFinalSp(string csvData) {
             try {
