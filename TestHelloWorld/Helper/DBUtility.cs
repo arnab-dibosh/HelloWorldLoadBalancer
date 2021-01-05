@@ -9,10 +9,10 @@ namespace Helper
 {
     public class DBUtility
     {
-        static bool isDevMode = true;
+        static bool isDevMode = false;
 
         public static string localConString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-        public static string serverConString = "Server=192.168.1.31;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        public static string serverConString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         public static string ConnectionString = isDevMode? localConString: serverConString;
 
         public static User GetUserByVid(string vid) {

@@ -26,12 +26,11 @@ namespace TestCache
         public Task StartAsync(CancellationToken stoppingToken) {
             //_logger.LogInformation("Background Service Started.");
 
+            //_logger.LogInformation("Background Service Started.");
+
             //$TODO: the following duraton should be changed after testing
-            //this is the previous timer
-            //_timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(6000));
-            //this timer will call the HelloWorld method after 10 seconds interval
-            _timer = new Timer(HelloWorld, null, 0,
-                    10000);
+            _timer = new Timer(DoWork, null, TimeSpan.Zero,
+                    TimeSpan.FromSeconds(6000));
 
             return Task.CompletedTask;
         }
@@ -49,11 +48,6 @@ namespace TestCache
                 }
             }
             connection.Close();
-        }
-
-        void HelloWorld(object state)
-        {
-            Debug.WriteLine("Hello World!");
         }
 
         public Task StopAsync(CancellationToken stoppingToken) {

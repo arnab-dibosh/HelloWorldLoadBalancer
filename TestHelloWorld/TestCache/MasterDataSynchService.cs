@@ -23,19 +23,14 @@ namespace TestCache
 
         public Task StartAsync(CancellationToken stoppingToken) {
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(6000));
+            _timer = new Timer(DoWork, null, 0, 60000);
 
             return Task.CompletedTask;
         }
 
         private void DoWork(object state) {
-            var count = Interlocked.Increment(ref executionCount);
-            
-            
-            if (count == 1) {
 
-                IDTPUtility.LoadMasterData(_masterDataCache,true);
-            }
+            IDTPUtility.LoadMasterData(_masterDataCache, true);
         }
 
         public Task StopAsync(CancellationToken stoppingToken) {
