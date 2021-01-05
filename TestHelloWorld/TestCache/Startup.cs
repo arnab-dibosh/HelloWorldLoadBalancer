@@ -44,6 +44,8 @@ namespace TestCache
             services.AddHostedService<BackgroundTransService9>();
             services.AddHostedService<BackgroundTransService10>();
 
+            services.AddHostedService<MasterDataSynchService>();
+
 
             services.AddControllers();
 

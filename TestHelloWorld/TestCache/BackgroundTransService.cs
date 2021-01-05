@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
 using Helper;
+using System.Diagnostics;
 
 namespace TestCache
 {
@@ -23,6 +24,8 @@ namespace TestCache
         }
 
         public Task StartAsync(CancellationToken stoppingToken) {
+            //_logger.LogInformation("Background Service Started.");
+
             //_logger.LogInformation("Background Service Started.");
 
             //$TODO: the following duraton should be changed after testing

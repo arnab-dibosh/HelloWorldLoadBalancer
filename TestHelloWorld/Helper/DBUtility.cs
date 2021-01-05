@@ -9,13 +9,16 @@ namespace Helper
 {
     public class DBUtility
     {
-        public static string ConnectionString = "Server=192.168.1.31;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-        //static string ConnectionString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        static bool isDevMode = true;
+
+        public static string localConString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        public static string serverConString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        public static string ConnectionString = isDevMode? localConString: serverConString;
 
         public static User GetUserByVid(string vid) {
             var user = new User();
 
-            string query = $"select * from Users where VID='{vid}'";
+            string query = $"select UserId, FullName from Users where VID='{vid}'";
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
@@ -38,12 +41,17 @@ namespace Helper
             return user;
         }
 
-        public static List<UserAccountInformationDTO> GetAllUserAccountInfo() {
+        public static List<UserAccountInformationDTO> GetAllUserAccountInfo(bool takeModifiedOnly=false) {
 
             var allAccInfo = new List<UserAccountInformationDTO>();
 
-            string query = $"select * from UserAccountInformation";
-            //string query = $"select top 1000 * from UserAccountInformation";
+            string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
+            string query = $"select Id, DeviceID, FinancialInstitutionId, AccountNumber from UserAccountInformation {whereClause}";
+            
+            if(isDevMode) query = $"select top 1000 * from UserAccountInformation  {whereClause}";
+
+            string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
+
             try {
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
                     using (SqlCommand command = new SqlCommand(query, connection)) {
@@ -56,9 +64,13 @@ namespace Helper
                             accInfo.DeviceID = reader["DeviceID"].ToString();
                             accInfo.FinancialInstitutionId = Convert.ToInt32(reader["FinancialInstitutionId"]);
                             accInfo.AccountNumber = reader["AccountNumber"].ToString();
+                            accInfo.IsLoaded = Convert.ToInt32(reader["IsLoaded"]);
                             allAccInfo.Add(accInfo);
                         }
                         reader.Close();
+
+                        command.CommandText = updateQuery;
+                       if(!isDevMode) command.ExecuteNonQuery();
                         connection.Close();
                     }
                 }
@@ -70,12 +82,17 @@ namespace Helper
         }
 
 
-        public static List<User> GetAllUser() {
+        public static List<User> GetAllUser(bool takeModifiedOnly=false) {
 
             var allUsers = new List<User>();
 
-            string query = $"select * from IDTPUsers";
-            //string query = $"select top 1000 * from IDTPUsers";
+            string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
+            string query = $"select UserId, DefaultFI, VirtualID from IDTPUsers {whereClause}";
+
+            string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
+
+            if (isDevMode) query = $"select top 1000 * from IDTPUsers  {whereClause}";
+
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
@@ -87,11 +104,16 @@ namespace Helper
                             var user = new User();
                             user.UserId = Convert.ToInt64(reader["UserId"]);
                             user.DefaultFI = Convert.ToInt64(reader["DefaultFI"]);
-                            //user.FullName = reader["FullName"].ToString();
                             user.VirtualID = reader["VirtualID"].ToString();
+                            user.IsLoaded = Convert.ToInt32(reader["IsLoaded"]);
+                            user.IDTP_PIN = reader["IDTP_PIN"].ToString();
+                            user.SecretSalt = reader["SecretSalt"].ToString();
                             allUsers.Add(user);
                         }
                         reader.Close();
+
+                        command.CommandText = updateQuery;
+                        if (!isDevMode) command.ExecuteNonQuery();
                         connection.Close();
                     }
                 }
@@ -105,7 +127,7 @@ namespace Helper
         public static void TransferFundFinalSp(TransactionDTOReq transactionDTO, SqlConnection connection) {
             try {
 
-                string spname = "AddTransaction_V2";                
+                string spname = "AddTransaction_V2";
                 SqlCommand sql_cmnd = new SqlCommand(spname, connection);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
                 #region params
@@ -130,7 +152,7 @@ namespace Helper
                 sql_cmnd.Parameters.AddWithValue("@SenderBankId", SqlDbType.Int).Value = transactionDTO.SenderBankId;
                 sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = transactionDTO.ReceiverBankId;
                 #endregion
-                sql_cmnd.ExecuteNonQuery();              
+                sql_cmnd.ExecuteNonQuery();
 
             }
             catch (Exception ex) {
@@ -202,11 +224,9 @@ namespace Helper
 
         public static void SimpleInsert(string item) {
 
-            string dbConnectionString = "Server=192.168.1.31;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-
-            using (SqlConnection con = new SqlConnection(dbConnectionString)) {
+            using (SqlConnection con = new SqlConnection(ConnectionString)) {
                 con.Open();
-                var commandString = "INSERT INTO TxTable (Value1) VALUES ('" + item + "')";
+                var commandString = $"INSERT INTO TxTable (Value1) VALUES ('{item}')";
                 SqlCommand cmd = new SqlCommand(commandString, con);
                 cmd.ExecuteNonQuery();
                 con.Close();

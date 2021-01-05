@@ -25,17 +25,7 @@ namespace TestCache.Controllers
         public string PopulateMasterData() {
             try {
 
-                List<User> UserList = DBUtility.GetAllUser();
-                List<UserAccountInformationDTO> userAccounts = DBUtility.GetAllUserAccountInfo();
-                foreach (var user in UserList) {
-                    _masterDataCache.UserDictionary.Add(user.VirtualID, user);
-                }
-
-                foreach (var accInfo in userAccounts) {
-                    _masterDataCache.FiDictionary.Add(accInfo.Id, accInfo);
-                }
-
-                return $"{UserList.Count} User {userAccounts.Count} FI populated";
+                return IDTPUtility.LoadMasterData(_masterDataCache, true);
             }
             catch (Exception e) {
                 return e.Message;
@@ -69,6 +59,7 @@ namespace TestCache.Controllers
                 bool receiverExists = _masterDataCache.UserDictionary.TryGetValue(tranDto.ReceiverVID, out receiver);
                 if (!senderExists) throw new Exception("Invalid Sender");
                 if (!receiverExists) throw new Exception("Invalid Receiver");
+                if(!SecurityService.DecryptAndCheck(tranDto.IDTPPIN, sender.SecretSalt, sender.IDTP_PIN)) throw new Exception("Invalid IDTP PIN");
 
                 UserAccountInformationDTO senderAccInfo, receiverAccInfo;
                 _masterDataCache.FiDictionary.TryGetValue(sender.DefaultFI, out senderAccInfo);

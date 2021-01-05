@@ -15,5 +15,6 @@ namespace Helper.Models
         public string DeviceID { get; set; }
         public bool IsClosed { get; set; }
         public bool IsEnabled { get; set; }
+        public int IsLoaded { get; set; }
     }
 }
