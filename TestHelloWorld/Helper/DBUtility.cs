@@ -33,7 +33,7 @@ namespace Helper
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 throw;
             }
             return user;
@@ -43,15 +43,19 @@ namespace Helper
 
             //InsertInLog(0, "Getting Acc Info form db");
             var allAccInfo = new List<UserAccountInformationDTO>();
-            string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
-            string query = $"select Id, DeviceID, FinancialInstitutionId, AccountNumber, IsLoaded from UserAccountInformation {whereClause}";
-
-            string updateQuery = $"update UserAccountInformation set IsLoaded=1 {whereClause}";
+            //string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
+            //string query = $"select Id, DeviceID, FinancialInstitutionId, AccountNumber, IsLoaded from UserAccountInformation {whereClause}";
+            //string updateQuery = $"update UserAccountInformation set IsLoaded=1 {whereClause}";
 
             try {
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
+                        SqlCommand command = new SqlCommand("SyncModifiedAndNewUserAccount", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        #region params
+                        command.Parameters.AddWithValue("@TakeModifiedOnly", SqlDbType.Bit).Value = takeModifiedOnly;
+                        #endregion
+                        command.CommandTimeout = 6000;
                         SqlDataReader reader = command.ExecuteReader();
 
                         while (reader.Read()) {
@@ -65,10 +69,9 @@ namespace Helper
                         }
                         reader.Close();
 
-                        command.CommandText = updateQuery;
-                        if (takeModifiedOnly) command.ExecuteNonQuery();
+                        //command.CommandText = updateQuery;
+                        //if (takeModifiedOnly) command.ExecuteNonQuery();
                         connection.Close();
-                    }
                 }
             }
             catch (Exception ex) {
@@ -83,17 +86,21 @@ namespace Helper
             //InsertInLog(0, "Getting user form db");
 
             var allUsers = new List<User>();
-            string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
-            string query = $"select UserId, DefaultFI, VirtualID, IsLoaded, IDTP_PIN, SecretSalt from IDTPUsers {whereClause}";
-
-            string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
+            //string whereClause = takeModifiedOnly ? $"where IsLoaded=0" : "";
+            //string query = $"select UserId, DefaultFI, VirtualID, IsLoaded, IDTP_PIN, SecretSalt from IDTPUsers {whereClause}";
+            //string updateQuery = $"update IDTPUsers set IsLoaded=1 {whereClause}";
 
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
-                    using (SqlCommand command = new SqlCommand(query, connection)) {
                         connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
+                        SqlCommand command = new SqlCommand("SyncModifiedAndNewIdtpUsers", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        #region params
+                        command.Parameters.AddWithValue("@TakeModifiedOnly", SqlDbType.Bit).Value = takeModifiedOnly;
+                        #endregion
+                        command.CommandTimeout = 6000;
+                        SqlDataReader reader = command.ExecuteReader();             
 
                         while (reader.Read()) {
                             var user = new User();
@@ -107,10 +114,9 @@ namespace Helper
                         }
                         reader.Close();
 
-                        command.CommandText = updateQuery;
-                        if (takeModifiedOnly) command.ExecuteNonQuery();
+                        //command.CommandText = updateQuery;
+                        //if (takeModifiedOnly) command.ExecuteNonQuery();
                         connection.Close();
-                    }
                 }
             }
             catch (Exception ex) {
@@ -137,18 +143,22 @@ namespace Helper
                     sql_cmnd.Parameters.AddWithValue("@MessageID", SqlDbType.VarChar).Value = transactionDTO.MessageID;
                     sql_cmnd.Parameters.AddWithValue("@SendingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.SendingBankRoutingNo;
                     sql_cmnd.Parameters.AddWithValue("@ReceivingBankRoutingNo", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankRoutingNo;
-                    sql_cmnd.Parameters.AddWithValue("@ReferenceSendingBANK", SqlDbType.VarChar).Value = transactionDTO.ReferenceSendingBANK;
                     sql_cmnd.Parameters.AddWithValue("@ReferenceIDTP", SqlDbType.VarChar).Value = transactionDTO.ReferenceIDTP;
                     sql_cmnd.Parameters.AddWithValue("@IPAddress", SqlDbType.VarChar).Value = transactionDTO.IPAddress;
                     sql_cmnd.Parameters.AddWithValue("@LatLong", SqlDbType.VarChar).Value = transactionDTO.LatLong;
                     sql_cmnd.Parameters.AddWithValue("@MobileNumber", SqlDbType.VarChar).Value = transactionDTO.MobileNumber;
                     sql_cmnd.Parameters.AddWithValue("@TransactionTypeId", SqlDbType.Int).Value = Convert.ToInt32(transactionDTO.TransactionTypeId);
                     sql_cmnd.Parameters.AddWithValue("@ReferernceNumber", SqlDbType.VarChar).Value = transactionDTO.IDTPPIN;
-                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankReference;
                     sql_cmnd.Parameters.AddWithValue("@senderId", SqlDbType.BigInt).Value = transactionDTO.SenderId;
                     sql_cmnd.Parameters.AddWithValue("@receiverId", SqlDbType.BigInt).Value = transactionDTO.ReceiverId;
                     sql_cmnd.Parameters.AddWithValue("@SenderBankId", SqlDbType.Int).Value = transactionDTO.SenderBankId;
                     sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = transactionDTO.ReceiverBankId;
+                    sql_cmnd.Parameters.AddWithValue("@FeeAmount", SqlDbType.Decimal).Value = Convert.ToDecimal(transactionDTO.FeeAmount);
+                    sql_cmnd.Parameters.AddWithValue("@VATAmount", SqlDbType.Decimal).Value = Convert.ToDecimal(transactionDTO.VATAmount);
+                    sql_cmnd.Parameters.AddWithValue("@SendingBankReference", SqlDbType.VarChar).Value = transactionDTO.SendingBankReference;
+                    sql_cmnd.Parameters.AddWithValue("@SendingPSPReference", SqlDbType.VarChar).Value = transactionDTO.SendingPSPReference;
+                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = transactionDTO.ReceivingBankReference;
+                    sql_cmnd.Parameters.AddWithValue("@ReceivingPSPReference", SqlDbType.VarChar).Value = transactionDTO.ReceivingPSPReference;
                     #endregion
                     sql_cmnd.ExecuteNonQuery();
                     connection.Close();
@@ -173,7 +183,7 @@ namespace Helper
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 throw;
             }
         }
@@ -195,7 +205,7 @@ namespace Helper
                 serviceRequestDTO.IDTPPIN = payLoads[9];
                 serviceRequestDTO.EndToEndID = payLoads[10];
                 serviceRequestDTO.SendingBankTxId = payLoads[11];
-                serviceRequestDTO.ReferenceSendingBANK = payLoads[12];
+                serviceRequestDTO.SendingBankReference = payLoads[12];
                 serviceRequestDTO.MessageID = payLoads[13];
 
                 string SenderAccNo = "22245612345678912", ReceiverAccNo = "33345612345678912", SendingBankRoutingNo = "098764123",
@@ -217,18 +227,22 @@ namespace Helper
                     sql_cmnd.Parameters.AddWithValue("@MessageID", SqlDbType.VarChar).Value = "REFSENBsblasd1231422";
                     sql_cmnd.Parameters.AddWithValue("@SendingBankRoutingNo", SqlDbType.VarChar).Value = SendingBankRoutingNo;
                     sql_cmnd.Parameters.AddWithValue("@ReceivingBankRoutingNo", SqlDbType.VarChar).Value = ReceivingBankRoutingNo;
-                    sql_cmnd.Parameters.AddWithValue("@ReferenceSendingBANK", SqlDbType.VarChar).Value = "SBL1REF";
                     sql_cmnd.Parameters.AddWithValue("@ReferenceIDTP", SqlDbType.VarChar).Value = serviceRequestDTO.ReferenceIDTP;
                     sql_cmnd.Parameters.AddWithValue("@IPAddress", SqlDbType.VarChar).Value = "192.156.98.71";
                     sql_cmnd.Parameters.AddWithValue("@LatLong", SqlDbType.VarChar).Value = "23.8103° N, 90.4125° E";
                     sql_cmnd.Parameters.AddWithValue("@MobileNumber", SqlDbType.VarChar).Value = "+8801987456789";
                     sql_cmnd.Parameters.AddWithValue("@TransactionTypeId", SqlDbType.Int).Value = 1;
                     sql_cmnd.Parameters.AddWithValue("@ReferernceNumber", SqlDbType.VarChar).Value = "REF12364564675876";
-                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = "1234567890";
                     sql_cmnd.Parameters.AddWithValue("@senderId", SqlDbType.BigInt).Value = senderId;
                     sql_cmnd.Parameters.AddWithValue("@receiverId", SqlDbType.BigInt).Value = receiverId;
                     sql_cmnd.Parameters.AddWithValue("@SenderBankId", SqlDbType.Int).Value = SenderBankId;
                     sql_cmnd.Parameters.AddWithValue("@ReceiverBankId", SqlDbType.Int).Value = ReceiverBankId;
+                    sql_cmnd.Parameters.AddWithValue("@FeeAmount", SqlDbType.Decimal).Value = 0;
+                    sql_cmnd.Parameters.AddWithValue("@VATAmount", SqlDbType.Decimal).Value = 0;
+                    sql_cmnd.Parameters.AddWithValue("@SendingBankReference", SqlDbType.VarChar).Value = "SBL1REF"; ;
+                    sql_cmnd.Parameters.AddWithValue("@SendingPSPReference", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@ReceivingBankReference", SqlDbType.VarChar).Value = "1234567890";
+                    sql_cmnd.Parameters.AddWithValue("@ReceivingPSPReference", SqlDbType.VarChar).Value = "";
                     #endregion
                     sql_cmnd.ExecuteNonQuery();
                     connection.Close();

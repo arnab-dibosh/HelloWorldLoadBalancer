@@ -83,7 +83,7 @@ namespace TestCache.Controllers
                 tranDto.IDTPPIN = payLoads[9];
                 tranDto.EndToEndID = payLoads[10];
                 tranDto.SendingBankTxId = payLoads[11];
-                tranDto.ReferenceSendingBANK = payLoads[12];
+                tranDto.SendingBankReference = payLoads[12];
                 tranDto.MessageID = payLoads[13];
 
                 string IdtpRef = "IDTP" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
@@ -113,9 +113,14 @@ namespace TestCache.Controllers
                 tranDto.PaymentNote = "Payment Note";
                 tranDto.ReferenceIDTP = IdtpRef;
                 tranDto.TransactionTypeId = "1";
-                tranDto.ReceivingBankReference = "";
                 tranDto.SenderId = sender.UserId;
                 tranDto.ReceiverId = receiver.UserId;
+                tranDto.FeeAmount = "0";
+                tranDto.VATAmount = "0";
+                tranDto.SendingPSPReference = "";
+                tranDto.ReceivingBankReference = "";
+                tranDto.ReceivingPSPReference = "";
+
 
                 _idtpTransCache.SetTransValue(tranDto);
 
@@ -144,7 +149,7 @@ namespace TestCache.Controllers
                 tranDto.IDTPPIN = payLoads[9];
                 tranDto.EndToEndID = payLoads[10];
                 tranDto.SendingBankTxId = payLoads[11];
-                tranDto.ReferenceSendingBANK = payLoads[12];
+                tranDto.SendingBankReference = payLoads[12];
                 tranDto.MessageID = payLoads[13];
 
                 string IdtpRef = "IDTP" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
@@ -159,9 +164,13 @@ namespace TestCache.Controllers
                 tranDto.PaymentNote = "Payment Note";
                 tranDto.ReferenceIDTP = IdtpRef;
                 tranDto.TransactionTypeId = "1";
-                tranDto.ReceivingBankReference = "";
                 tranDto.SenderId = 1;
                 tranDto.ReceiverId = 2;
+                tranDto.FeeAmount = "0";
+                tranDto.VATAmount = "0";
+                tranDto.SendingPSPReference = "";
+                tranDto.ReceivingBankReference = "";
+                tranDto.ReceivingPSPReference = "";
 
                 DBUtility.TransferFundFinalSp(tranDto);
 

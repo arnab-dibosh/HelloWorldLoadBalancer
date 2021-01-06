@@ -10,8 +10,6 @@ namespace Helper.Models
         public string ReceiverVID { get; set; }
         public string Amount { get; set; }
         public string SenderBankSwiftCode { get; set; }
-        public string ReferenceSendingBANK { get; set; }
-        public string ReceivingBankReference { get; set; }
         public string ChannelName { get; set; }
         public string DeviceID { get; set; }
         public string IDTPPIN { get; set; }
@@ -34,6 +32,12 @@ namespace Helper.Models
         public long ReceiverId { get; set; }
         public long SenderBankId { get; set; }
         public long ReceiverBankId { get; set; }
+        public string SendingBankReference { get; set; }
+        public string SendingPSPReference { get; set; }
+        public string ReceivingBankReference { get; set; }
+        public string ReceivingPSPReference { get; set; }
+        public string FeeAmount { get; set; }
+        public string VATAmount { get; set; }
 
     }
 }
