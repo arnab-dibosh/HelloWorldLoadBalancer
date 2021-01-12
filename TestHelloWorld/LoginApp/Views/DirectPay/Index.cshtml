@@ -15,10 +15,12 @@
         </div>
     </form>
 </div>
-
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     $(document).ready(function () {
         var resutl = '@ViewBag.Result';
-        alert(resutl);
+        console.log("Entered js block", resutl);
+
+        if (resutl) alert(resutl);
     });
 </script>
