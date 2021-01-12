@@ -21,6 +21,9 @@
     <Reference Include="IDTP.Security">
       <HintPath>Library\IDTP.Security.dll</HintPath>
     </Reference>
+    <Reference Include="IDTPSecurity">
+      <HintPath>Library\IDTPSecurity.dll</HintPath>
+    </Reference>
     <Reference Include="X509_Signature">
       <HintPath>Library\X509_Signature.dll</HintPath>
     </Reference>
