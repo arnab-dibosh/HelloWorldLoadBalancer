@@ -1,19 +1,23 @@
-﻿using Helper.Models;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestHelloWorld.Model;
 
 namespace TestHelloWorld.Controllers
 {
-    public class TransactionController : Controller
+    [ApiController]
+    public class TransSPController : ControllerBase
     {
-        [HttpPost("/TransactionFundInsertBaseLine", Name = "TransactionFundInsertBaseLine")]
-        public string TransactionFundInsertBaseLine([FromBody] Payload payload) {
-            try {
+        [HttpPost("/TransactionInsertBaseLine", Name = "TransactionInsertBaseLine")]
+        public string TransactionInsertBaseLine([FromBody] Payload payload)
+        {
+            try
+            {
 
-                var tranDto = new TransactionDTOReq();
+                var tranDto = new TransactionDTO();
                 var payLoads = payload.xmlData.Split(",").Select(x => x.Trim()).ToArray();
                 tranDto.SenderBankSwiftCode = payLoads[0];
                 tranDto.SenderVID = payLoads[1];
@@ -50,14 +54,14 @@ namespace TestHelloWorld.Controllers
                 tranDto.ReceivingBankReference = "";
                 tranDto.ReceivingPSPReference = "";
 
-                Helper.DBUtility.TransferFundFinalSp(tranDto);
+                DBUtility.TransactionSp(tranDto);
 
                 return "Insert successfull";
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return e.Message;
             }
         }
-
     }
 }
