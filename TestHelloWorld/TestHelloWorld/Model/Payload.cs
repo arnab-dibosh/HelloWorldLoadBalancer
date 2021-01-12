@@ -27,4 +27,18 @@ namespace TestHelloWorld.Model
     {
         public string xmlData { get; set; }
     }
+
+    public class SucurityPayload
+    {
+        public string xmlData { get; set; }
+        public string signatureData { get; set; }
+    }
+    public class SucurityPayloadAll
+    {
+        public string key32Bytes { get; set; }
+        public string nonce12Bytes { get; set; }
+        public string assocData { get; set; }
+        public string plainText { get; set; }
+        public string signatureData { get; set; }
+    }
 }
