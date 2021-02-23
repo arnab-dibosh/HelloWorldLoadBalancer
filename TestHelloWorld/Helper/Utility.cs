@@ -32,35 +32,20 @@ namespace Helper
         }
 
 
-        public static TransactionResponseDTO ProcessDirectPay(TransactionDTOReqCSV transactionDtoReq)
+        public static string ProcessDirectPay(TransactionDTOReqCSV transactionDtoReq)
         {
             try
             {
-                var transactionResponseDto = new TransactionResponseDTO();
-                //Format Validation >>>>
-                //InputDataValidation(transactionDtoReq);
-                // Format Validation <<<<
+                
+                transactionDtoReq = SenderReceiverValidation(transactionDtoReq);
 
-                // Enrichment >>>>
-                //transactionDtoReq.TransactionTypeId = IDTPUtils.Constants.TransactionTypes.DIRECT_PAY;
-                var senderReceiverInfo = SenderReceiverValidation(transactionDtoReq);
-                // Enrichment <<<<
+                SqlDBUtility.InsertTransaction(transactionDtoReq);
 
-                // Action >>>>
-                // Process Direct Pay Transaction
-                //var transactionResponseDto = ProcessTransaction(transactionDtoReq);
-                // Update RTP 
-                //UpdateRTPStatus(transactionDtoReq);
-
-                return transactionResponseDto;
+                return "Transaction Inserted";
             }
-            // Exception Handling
             catch (Exception ex)
             {
-                var responseDto = new TransactionResponseDTO();
-                responseDto.Message = ex.Message;
-                return responseDto;
-                //return responseDto;
+                throw ex;
             }
         }
 
@@ -69,7 +54,7 @@ namespace Helper
         {
            
      
-                User sender = ScyllaDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
+                User sender = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
 
             // Check Sender Exist
             if (string.IsNullOrEmpty(sender.VirtualID))
@@ -92,7 +77,7 @@ namespace Helper
             var senderData = items.FirstOrDefault(x => x.FiInstId == 11); // Need Bank Id
             transactionDtoReq.SenderAccNo = senderData.AccNum;
 
-            User receiver = ScyllaDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
+            User receiver = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
 
            
 

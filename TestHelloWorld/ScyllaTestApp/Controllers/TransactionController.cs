@@ -17,12 +17,9 @@ namespace ScyllaTestApp.Controllers
             try {
                 TransactionDTOReqCSV transactionDTO = Utility.CreateTransactionDTOFromCSV(payload.CsvData);
 
-                var responseObject = Utility.ProcessDirectPay(transactionDTO);
+               var returnMsg= Utility.ProcessDirectPay(transactionDTO);      
 
-                
-
-
-                return "Insert Successfull";
+                return returnMsg;
             }
             catch (Exception ex) {
                 return ex.Message;
