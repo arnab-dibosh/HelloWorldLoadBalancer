@@ -52,16 +52,15 @@ namespace Helper
 
         private static TransactionDTOReqCSV SenderReceiverValidation(TransactionDTOReqCSV transactionDtoReq)
         {
-           
      
-                User sender = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
+            User sender = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
 
             // Check Sender Exist
             if (string.IsNullOrEmpty(sender.VirtualID))
                 throw new Exception("Sender does not exist");
 
-                // Check Is Sender Restricted
-                if (sender.IsRestricted == 1)
+            // Check Is Sender Restricted
+            if (sender.IsRestricted == 1)
                 throw new Exception("Sender is Restricted");
 
             // Check Is Sender Device Restricted
@@ -73,13 +72,39 @@ namespace Helper
                 if (!isValidPin)
                     throw new Exception("Invalid PIN");
 
-            List<FiAccountsDTO> items = JsonConvert.DeserializeObject<List<FiAccountsDTO>>(sender.FiUserData);
-            var senderData = items.FirstOrDefault(x => x.FiInstId == 11); // Need Bank Id
+            List<FiAccountsDTO> senderItems = JsonConvert.DeserializeObject<List<FiAccountsDTO>>(sender.FiUserData);
+            var senderData = senderItems.FirstOrDefault(x => x.FiInstId == 11); // Need Bank Id
+
+            transactionDtoReq.SenderId = (senderData.FiInstType == 2) ? senderData.FiInstId: sender.UserId;
             transactionDtoReq.SenderAccNo = senderData.AccNum;
+            transactionDtoReq.SenderBankId = Convert.ToInt32(senderData.BankId);
+            transactionDtoReq.IndirectParticipantSender = Convert.ToInt64(senderData.IndPartcId);
+            transactionDtoReq.IndirectParticipantSenderAccount = senderData.IndPartcAccNum;
 
-            User receiver = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
+            // Get Receiver Information
+            User receiver = SqlDBUtility.GetUserByVid(transactionDtoReq.ReceiverVID);
+            // Check Receiver Exist
+            if (string.IsNullOrEmpty(receiver.VirtualID))
+                throw new Exception("Receiver does not exist");
 
-           
+            // Check Is Receiver Restricted
+            if (receiver.IsRestricted == 1)
+                throw new Exception("Receiver is Restricted");
+
+            // Check Is Receiver Device Restricted
+            if (receiver.IsDeviceRestricted == 1)
+                throw new Exception("Receiver Device is Restricted");
+
+            List<FiAccountsDTO> receiverItems = JsonConvert.DeserializeObject<List<FiAccountsDTO>>(receiver.FiUserData);
+            var receiverData = receiverItems.FirstOrDefault(x => x.FiAccId == receiver.DefaultFI); 
+
+            transactionDtoReq.ReceiverId = (receiverData.FiInstType == 2) ? receiverData.FiInstId : receiver.UserId;
+            transactionDtoReq.ReceiverAccNo = receiverData.AccNum;
+            transactionDtoReq.ReceiverBankId = Convert.ToInt32(receiverData.BankId);
+            transactionDtoReq.IndirectParticipantReceiver = Convert.ToInt64(receiverData.IndPartcId);
+            transactionDtoReq.IndirectParticipantReceiverAccount = receiverData.IndPartcAccNum;
+            transactionDtoReq.ReceiverBankSwiftCode = receiverData.SwiftBic;
+            transactionDtoReq.IsIndirectPartipantTransaction = ((senderData.FiInstType == 2) || (receiverData.FiInstType == 2)) ? 1 : 0;
 
             return transactionDtoReq;
         }
