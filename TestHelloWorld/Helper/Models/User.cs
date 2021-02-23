@@ -13,6 +13,11 @@ namespace Helper.Models
         public int IsLoaded { get; set; }
         public string IDTP_PIN { get; set; }        
         public string SecretSalt { get; set; }
+        public string DeviceId { get; set; }
+        public string ChannelName { get; set; }
+        public int IsDeviceRestricted { get; set; }
+        public string FiUserData { get; set; }
         
+
     }
 }
