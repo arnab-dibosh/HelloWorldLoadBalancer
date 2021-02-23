@@ -34,7 +34,7 @@ namespace TestHelloWorld.Controllers
                 tranDto.SendingBankReference = payLoads[12];
                 tranDto.MessageID = payLoads[13];
 
-                string IdtpRef = "IDTP" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                string IdtpRef = "IDTP" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
 
                 tranDto.SenderAccNo = "ACC123";
                 tranDto.ReceiverAccNo = "ACC345";

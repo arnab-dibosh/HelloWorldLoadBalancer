@@ -74,7 +74,7 @@ namespace TestHelloWorld
                             TimeSpan.FromMinutes(1);
                     });
 
-                    webBuilder.UseUrls("http://+:7001");
+                    webBuilder.UseUrls("http://+:7006");
                     webBuilder.UseStartup<Startup>();
                 });
     }

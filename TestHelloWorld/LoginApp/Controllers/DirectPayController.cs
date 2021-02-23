@@ -26,7 +26,7 @@ namespace IDTPApp.Controllers
 
 
                 using var client = new HttpClient();
-                string endpoint = "http://localhost:7001" + "/TransactionInsertBaseLine";
+                string endpoint = "http://192.168.1.21:7006" + "/TransactionInsertBaseLine";
                 using (HttpResponseMessage response = client.PostAsJsonAsync(endpoint, objPayloadData).Result) {
 
                     response.EnsureSuccessStatusCode();
