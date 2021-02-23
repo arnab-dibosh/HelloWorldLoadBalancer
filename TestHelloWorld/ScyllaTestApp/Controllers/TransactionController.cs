@@ -10,7 +10,7 @@ namespace ScyllaTestApp.Controllers
     public class TransactionController : Controller
     {
         [HttpPost("/Transferfundcsvwithscylla", Name = "Transferfundcsvwithscylla")]
-        public string Transferfundcsvwithscylla( Payload payload) {
+        public string Transferfundcsvwithscylla([FromBody]Payload payload) {
             string apiRequestStartTime = "";
             apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
 
