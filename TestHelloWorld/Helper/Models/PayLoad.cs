@@ -8,4 +8,9 @@ namespace Helper.Models
     {
         public string xmlData { get; set; }
     }
+
+    public class CSVPayload
+    {
+        public string CsvData { get; set; }
+    }
 }

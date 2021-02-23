@@ -10,13 +10,13 @@ namespace Helper
     public class ScyllaDBUtility
     {
 
-        //public static string ConnectionString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-        public static string ConnectionString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        public static string ConnectionString = "Server=59.152.61.37,11072;Database=IDTPDevDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        //public static string ConnectionString = "Server=192.168.1.32;Database=IDTPDevDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
 
         public static User GetUserByVid(string vid) {
             var user = new User();
 
-            string query = $"select UserId, FullName from Users where VID='{vid}'";
+            string query = $"select UserId, FullName from IDTPUsersInMemory where VirtualID='{vid}'";
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {

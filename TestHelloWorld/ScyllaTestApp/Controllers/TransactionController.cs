@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Helper.Models;
+using Helper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +12,22 @@ namespace ScyllaTestApp.Controllers
     public class TransactionController : Controller
     {
         [HttpPost("/Transferfundcsvwithscylla", Name = "Transferfundcsvwithscylla")]
-        public string Transferfundcsvwithscylla([FromBody]Payload payload) {
-            string apiRequestStartTime = "";
-            apiRequestStartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
+        public string Transferfundcsvwithscylla([FromBody] CSVPayload payload) {
 
             try {
+                TransactionDTOReqCSV transactionDTO = Utility.CreateTransactionDTOFromCSV(payload.CsvData);
 
-                string strDockerName = System.Environment.MachineName;
-                string dtApiResponseTime = string.Empty;
-                try {
-                    
-                }
-                catch (Exception) {
-                    throw;
-                }
+                User sender = ScyllaDBUtility.GetUserByVid(transactionDTO.SenderVID);
+                User receiver = ScyllaDBUtility.GetUserByVid(transactionDTO.SenderVID);
+
 
                 return "Insert Successfull";
             }
-            catch (Exception) {
-                throw;
+            catch (Exception ex) {
+                return ex.Message;
             }
         }
 
     }
 
-    public class Payload
-    {
-        public string CsvData { get; set; }
-    }
 }
