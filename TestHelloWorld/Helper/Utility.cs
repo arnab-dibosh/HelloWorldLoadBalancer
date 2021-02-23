@@ -52,7 +52,7 @@ namespace Helper
 
         private static TransactionDTOReqCSV SenderReceiverValidation(TransactionDTOReqCSV transactionDtoReq)
         {
-     
+            Int64 senderBankId = 0;
             User sender = SqlDBUtility.GetUserByVid(transactionDtoReq.SenderVID);
 
             // Check Sender Exist
@@ -72,8 +72,9 @@ namespace Helper
                 if (!isValidPin)
                     throw new Exception("Invalid PIN");
 
+            senderBankId = SqlDBUtility.GetBankId(transactionDtoReq.SenderBankSwiftCode);
             List<FiAccountsDTO> senderItems = JsonConvert.DeserializeObject<List<FiAccountsDTO>>(sender.FiUserData);
-            var senderData = senderItems.FirstOrDefault(x => x.FiInstId == 11); // Need Bank Id
+            var senderData = senderItems.FirstOrDefault(x => x.FiInstId == senderBankId); 
 
             transactionDtoReq.SenderId = (senderData.FiInstType == 2) ? senderData.FiInstId: sender.UserId;
             transactionDtoReq.SenderAccNo = senderData.AccNum;
