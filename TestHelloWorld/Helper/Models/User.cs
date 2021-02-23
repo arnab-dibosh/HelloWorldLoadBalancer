@@ -16,6 +16,7 @@ namespace Helper.Models
         public string DeviceId { get; set; }
         public string ChannelName { get; set; }
         public int IsDeviceRestricted { get; set; }
+        public int IsRestricted { get; set; }
         public string FiUserData { get; set; }
         
 

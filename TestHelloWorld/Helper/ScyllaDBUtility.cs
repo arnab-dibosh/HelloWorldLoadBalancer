@@ -16,7 +16,7 @@ namespace Helper
         public static User GetUserByVid(string vid) {
             var user = new User();
 
-            string query = $"select UserId, VirtualID, FullName, DefaultFI, IDTP_PIN, SecretSalt, DeviceId, ChannelName, IsDeviceRestricted, FiUserData from IDTPUsersInMemory where VirtualID='{vid}'";
+            string query = $"select UserId, VirtualID, FullName, DefaultFI, IDTP_PIN, SecretSalt, DeviceId, ChannelName, IsRestricted, IsDeviceRestricted, FiUserData from IDTPUsersInMemory where VirtualID='{vid}'";
             try {
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString)) {
@@ -34,6 +34,7 @@ namespace Helper
                             user.DeviceId = reader["DeviceId"].ToString();
                             user.ChannelName = reader["ChannelName"].ToString();
                             user.IsDeviceRestricted = Convert.ToInt32(reader["IsDeviceRestricted"]);
+                            user.IsRestricted = Convert.ToInt32(reader["IsRestricted"]);
                             user.FiUserData = reader["FiUserData"].ToString();
                         }
                         reader.Close();

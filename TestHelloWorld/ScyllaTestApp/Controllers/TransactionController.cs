@@ -17,12 +17,9 @@ namespace ScyllaTestApp.Controllers
             try {
                 TransactionDTOReqCSV transactionDTO = Utility.CreateTransactionDTOFromCSV(payload.CsvData);
 
-                User sender = ScyllaDBUtility.GetUserByVid(transactionDTO.SenderVID);
+                var responseObject = Utility.ProcessDirectPay(transactionDTO);
 
-                //Pin Validation
-                bool isValidPin= SecurityService.DecryptAndCheck(transactionDTO.IDTPPIN, sender.SecretSalt, sender.IDTP_PIN);
-
-                User receiver = ScyllaDBUtility.GetUserByVid(transactionDTO.SenderVID);
+                
 
 
                 return "Insert Successfull";
