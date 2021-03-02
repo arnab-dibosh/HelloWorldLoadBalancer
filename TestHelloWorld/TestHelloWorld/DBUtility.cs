@@ -12,7 +12,7 @@ namespace TestHelloWorld
 {
     public class DBUtility
     {
-        private static string _mConString = @"Server=NESAR-2019\SQL2017;Database=TestHelloWorld;User ID=sa;password=onirban123@;Pooling=true;Max Pool Size=300;";
+        private static string _mConString = @"Server=59.152.61.37,14331;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = @"Server=DESKTOP-QS1VJGL\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = "Server=192.168.1.32;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = "Server=192.168.0.31;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
@@ -320,7 +320,7 @@ namespace TestHelloWorld
             try
             {
 
-                string spname = "AddTransaction_V2";
+                string spname = "AddTransactionInMemory";
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
                     connection.Open();
