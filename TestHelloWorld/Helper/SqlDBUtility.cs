@@ -47,7 +47,38 @@ namespace Helper
             }
             return user;
         }
-               
+
+        public static Int64 GetBankId(string SwiftCode)
+        {
+            Int64 BankId = 0;
+            string query = $"select FiUserId from FinancialInstitution where SwiftCode='{SwiftCode}'";
+
+            try
+            {
+                
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        connection.Open();
+                        SqlDataReader reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            BankId = Convert.ToInt64(reader["FiUserId"]);
+                        }
+                        reader.Close();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return BankId;
+        }
+
         public static void InsertTransaction(TransactionDTOReqCSV transactionDTO) {
             try {
                
