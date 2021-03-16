@@ -18,7 +18,7 @@ namespace TestWebApplication
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseUrls("http://+:7006");
+                    webBuilder.UseUrls("http://+:8002");
                     webBuilder.UseStartup<Startup>();
                 });
     }
