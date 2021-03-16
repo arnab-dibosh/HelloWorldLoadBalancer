@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<div class="text-center">
+    <div class="col-8">
+        <form autocomplete="off" action="/Home/Directpay" method="POST">
+            <div class="form-group row">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-8 ">
+                    <button type="submit" class="btn btn-primary">Insert In DB</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    @{
+        if (!string.IsNullOrEmpty(ViewBag.ReturnMessage)) {
+
+            <div class="display-5">@ViewBag.ReturnMessage</div>
+        }
+    }
+    <h3 class="display-5">Welcome to @ViewBag.MachineName</h3>
+</div>

@@ -10,8 +10,8 @@ namespace Helper
     public class DBUtility
     {
 
-        //public static string ConnectionString = "Server=59.152.61.37,11081;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
-        public static string ConnectionString = "Server=192.168.1.32;Database=IDTPServerDB;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        //private static string ConnectionString = @"Server=DESKTOP-QS1VJGL\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;Pooling=true;Max Pool Size=300;";
+        public static string ConnectionString = "Server=192.168.100.12;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
 
         public static User GetUserByVid(string vid) {
             var user = new User();
@@ -263,5 +263,26 @@ namespace Helper
                 con.Close();
             }
         }
+
+        public static void WriteData() {
+            try {
+                string query = $"INSERT INTO TestHelloApp (Id, AppServer, Message, CreatedOn)VALUES('{Guid.NewGuid().ToString()}'," +
+                    $" '{Environment.MachineName}', 'Hello', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff")}');";
+
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+
+                    using (SqlCommand command = new SqlCommand(query, connection)) {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+            }
+            catch (Exception) {
+                throw;
+            }
+        }
+
     }
 }
