@@ -28,6 +28,12 @@ namespace TestHelloWorld.Controllers
             _logger = logger;
         }
 
+        [HttpPost("/CallParticipantFI", Name = "CallParticipantFI")]
+        public string CallParticipantFI([FromBody] string identifier) {
+            DBUtility.InsertInserverLog("T3", identifier);
+            return identifier;
+        }
+
 
         [HttpPost("/OneInsertWithSpTran", Name = "OneInsertWithSpTran")]
         public string OneInsertWithSpTran([FromBody] SimplePayload payload) {

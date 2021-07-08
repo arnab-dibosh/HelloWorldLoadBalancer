@@ -12,7 +12,7 @@ namespace TestHelloWorld
 {
     public class DBUtility
     {
-        private static string _mConString = @"Server=59.152.61.37,14331;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
+        private static string _mConString = @"Server=192.168.100.54;Database=IDTPServerDB;User ID=sa;password=Techvision123@;";
         //private static string _mConString = @"Server=DESKTOP-QS1VJGL\SQLEXPRESS;Database=TestHelloWorld;User ID=sa;password=bs23;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = "Server=192.168.1.32;Database=TestHelloWorld;User ID=sa;password=Techvision123@;Pooling=true;Max Pool Size=300;";
         //private static string _mConString = "Server=192.168.0.31;Database=TestHelloWorld;User ID=sa;password=Techvision123?;Pooling=true;Max Pool Size=300;";
@@ -252,6 +252,41 @@ namespace TestHelloWorld
                 throw;
             }
             return user;
+        }
+
+        public static void InsertInserverLog(string from, string identifier) {
+            try {
+
+                string spName = "AddDetailLog2";
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString)) {
+                    connection.Open();
+                    SqlCommand sql_cmnd = new SqlCommand(spName, connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@RefNoSendingBank", SqlDbType.VarChar).Value = identifier;
+                    sql_cmnd.Parameters.AddWithValue("@RefNoReceivingBank", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@RefNo_IDTP", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@Layer", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@StepTitle", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@RequestFrom", SqlDbType.VarChar).Value = from;
+                    sql_cmnd.Parameters.AddWithValue("@RequestTo", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@RequestMessage", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@ErrorCode", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@ErrorTitle", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@ErrorDescription", SqlDbType.VarChar).Value = "";
+                    sql_cmnd.Parameters.AddWithValue("@ReferenceNo", SqlDbType.VarChar).Value = "";
+
+
+                    sql_cmnd.Parameters.AddWithValue("@Order", SqlDbType.Int).Value = 0;
+                    sql_cmnd.Parameters.AddWithValue("@LogType", SqlDbType.Int).Value = 4;
+
+                    sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            catch (Exception) {
+                throw;
+            }
         }
 
         public static void OneInsertSpTran(string transactionId, string clientRequestTime, string spName) {
