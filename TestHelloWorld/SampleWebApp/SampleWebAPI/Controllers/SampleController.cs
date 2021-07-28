@@ -27,12 +27,13 @@ namespace SampleWebAPI.Controllers
             return Ok(isInserted);
         }
 
-        private bool OneInsertDynamicSql(string PortalServer)
+        private string OneInsertDynamicSql(string PortalServer)
         {
             try
             {
+                string guid = Guid.NewGuid().ToString();
                 string query = "INSERT INTO Sample" + "(Id,Message,APIServer,PortalServer,CreatedOn) " +
-                    "VALUES('" + Guid.NewGuid().ToString() + "', '" + "Success" + "', '" + System.Environment.MachineName +
+                    "VALUES('" + guid + "', '" + "Success" + "', '" + System.Environment.MachineName +
                     "', '" + PortalServer + "', GetDate() )";
 
                 using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("PrimaryDB")))
@@ -44,12 +45,12 @@ namespace SampleWebAPI.Controllers
                         connection.Close();
                     }
                 }
+                return guid;
             }
             catch (Exception)
             {
                 throw;
             }
-            return true;
         }
     }
 }

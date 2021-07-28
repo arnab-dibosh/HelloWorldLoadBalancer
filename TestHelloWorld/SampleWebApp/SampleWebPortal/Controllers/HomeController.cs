@@ -32,15 +32,16 @@ namespace SampleWebPortal.Controllers
         }
 
         [HttpPost]
-        public IActionResult SampleInsert()
+        public async Task<IActionResult> SampleInsertAsync()
         {
             var APIURL = _configuration["SampleTestAPIURL"];
             var machineName = Environment.MachineName;
             ViewBag.MachineName = machineName;
             try
             {
-                client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
-                ViewBag.ReturnMessage = "Insert Successful";
+                var response = await client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
+                string responseBody = await response.Content.ReadAsStringAsync();
+                ViewBag.ReturnMessage = "Insert Successful via " + machineName + " RecordId: " + responseBody;
             }
             catch (Exception ex)
             {
