@@ -39,9 +39,7 @@ namespace SampleWebAPI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SampleWebAPI v1"));
+                app.UseDeveloperExceptionPage();               
             }
 
             app.UseHttpsRedirection();
@@ -54,6 +52,8 @@ namespace SampleWebAPI
             {
                 endpoints.MapControllers();
             });
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SampleWebAPI v1"));
         }
     }
 }

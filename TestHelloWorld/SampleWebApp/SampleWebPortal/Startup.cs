@@ -23,6 +23,9 @@ namespace SampleWebPortal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddHealthChecks()
+            //    .AddUrlGroup(new Uri("http://59.152.61.37:36503/"));
+
             services.AddControllersWithViews();
         }
 
@@ -48,6 +51,7 @@ namespace SampleWebPortal
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapHealthChecks("/health");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
