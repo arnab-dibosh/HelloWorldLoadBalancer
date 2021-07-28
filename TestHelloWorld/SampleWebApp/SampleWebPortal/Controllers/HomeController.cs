@@ -34,7 +34,7 @@ namespace SampleWebPortal.Controllers
         }
 
         [HttpPost]
-        public IActionResult SampleInsert() {
+        public async Task<IActionResult> SampleInsert() {
             try {
 
                 for (int i = 0; i < 3; i++) {
@@ -49,8 +49,10 @@ namespace SampleWebPortal.Controllers
                         var machineName = Environment.MachineName;
                         ViewBag.MachineName = machineName;
 
-                        client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
-                        ViewBag.ReturnMessage = "Insert Successful";
+                        var response = await client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        ViewBag.ReturnMessage = "Insert Successful via " + machineName + " RecordId: " + responseBody;
+
                         break;
                     }
 
