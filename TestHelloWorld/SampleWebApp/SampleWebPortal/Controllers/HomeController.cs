@@ -18,10 +18,7 @@ namespace SampleWebPortal.Controllers
 
         private readonly ILogger<HomeController> _logger;
         private static HttpClient client = new HttpClient();
-        string[] ipList = new string[] {
-            "192.168.100.12", "192.168.100.13", "192.168.100.14",
-            "192.168.100.22", "192.168.100.23", "192.168.100.24",
-            "192.168.100.34", "192.168.100.35", "192.168.100.36" };
+        List<string> ipList = new List<string>();
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration) {
             _logger = logger;
@@ -35,33 +32,45 @@ namespace SampleWebPortal.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SampleInsert() {
+            var APIURL = string.Empty;
             try {
+
+                string urlString = _configuration["ApiServerList"];
+                string[] urlListFromAppSettings = urlString.Split(",");
+                int maxRange = 8;
+
+                for (int i = 0; i < 9; i++)
+                    ipList.Add(urlListFromAppSettings[i]);
 
                 for (int i = 0; i < 3; i++) {
 
                     Random r = new Random();
-                    int randomNum = r.Next(0, 8);
+                    int randomNum = r.Next(0, maxRange);
                     string serverIp = ipList[randomNum];
 
                     if (IsApiActive(serverIp)) {
 
-                        var APIURL = $"http://{serverIp}:5051";
+                        APIURL = $"http://{serverIp}:5051/SampleInsert/";
                         var machineName = Environment.MachineName;
                         ViewBag.MachineName = machineName;
 
-                        var response = await client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        string[] authorsList = responseBody.Split(",");
-                        ViewBag.ReturnMessage = "Insert Successful via " + authorsList[1] + " RecordId: " + authorsList[0];
+                        var response =  client.PostAsJsonAsync(APIURL, machineName);
+                        string responseBody = await response.Result.Content.ReadAsStringAsync();
+                        string[] returnList = responseBody.Split(",");
+                        ViewBag.ReturnMessage = "Insert Successful via " + returnList[1] + " RecordId: " + returnList[0];
 
                         break;
+                    }
+                    else {
+                        maxRange--;
+                        ipList.Remove(serverIp);
                     }
 
                 }
             }
             catch (Exception ex) {
 
-                ViewBag.ReturnMessage = ex.Message;
+                ViewBag.ReturnMessage =APIURL+ ex.Message;
             }
 
             return View("Index");
