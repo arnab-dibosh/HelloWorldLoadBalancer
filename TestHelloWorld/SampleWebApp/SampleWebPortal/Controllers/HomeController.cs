@@ -51,7 +51,8 @@ namespace SampleWebPortal.Controllers
 
                         var response = await client.PostAsJsonAsync(APIURL + "SampleInsert", machineName);
                         string responseBody = await response.Content.ReadAsStringAsync();
-                        ViewBag.ReturnMessage = "Insert Successful via " + machineName + " RecordId: " + responseBody;
+                        string[] authorsList = responseBody.Split(",");
+                        ViewBag.ReturnMessage = "Insert Successful via " + authorsList[1] + " RecordId: " + authorsList[0];
 
                         break;
                     }

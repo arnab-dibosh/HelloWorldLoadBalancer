@@ -32,6 +32,10 @@ namespace SampleWebAPI.Controllers
             try
             {
                 string guid = Guid.NewGuid().ToString();
+                string machineName = Environment.MachineName;
+
+                string recordIdAndHostMachineName = guid + "," + machineName;
+
                 string query = "INSERT INTO Sample" + "(Id,Message,APIServer,PortalServer,CreatedOn) " +
                     "VALUES('" + guid + "', '" + "Success" + "', '" + System.Environment.MachineName +
                     "', '" + PortalServer + "', GetDate() )";
@@ -45,7 +49,7 @@ namespace SampleWebAPI.Controllers
                         connection.Close();
                     }
                 }
-                return guid;
+                return recordIdAndHostMachineName;
             }
             catch (Exception)
             {
