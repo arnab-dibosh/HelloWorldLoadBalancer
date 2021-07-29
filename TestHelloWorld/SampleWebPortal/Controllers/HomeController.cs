@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Helper;
 
 namespace SampleWebPortal.Controllers
 {
@@ -48,7 +49,7 @@ namespace SampleWebPortal.Controllers
                     int randomNum = r.Next(0, maxRange);
                     string serverIp = ipList[randomNum];
 
-                    if (IsApiActive(serverIp)) {
+                    if (Utility.IsServerActive(serverIp)) {
 
                         APIURL = $"http://{serverIp}:5051/SampleInsert/";
                         var machineName = Environment.MachineName;
@@ -75,19 +76,7 @@ namespace SampleWebPortal.Controllers
 
             return View("Index");
         }
-
-        private bool IsApiActive(string url) {
-
-            bool output = true;
-            var ping = new System.Net.NetworkInformation.Ping();
-
-            var result = ping.Send(url);
-
-            if (result.Status != System.Net.NetworkInformation.IPStatus.Success)
-                output = false;
-
-            return output;
-        }
+       
 
         public IActionResult Privacy() {
             return View();

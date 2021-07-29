@@ -111,7 +111,18 @@ namespace Helper
         }
 
 
+        public static bool IsServerActive(string url) {
 
+            bool output = true;
+            var ping = new System.Net.NetworkInformation.Ping();
+
+            var result = ping.Send(url);
+
+            if (result.Status != System.Net.NetworkInformation.IPStatus.Success)
+                output = false;
+
+            return output;
+        }
 
     }
 }
